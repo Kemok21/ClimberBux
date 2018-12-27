@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="array_gender_option">
+        <item>Unknown</item>
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <string-array name="array_rank_option">
+        <item>b/r</item>
+        <item>3</item>
+        <item>2</item>
+        <item>1</item>
+        <item>KMS</item>
+        <item>MS</item>
+    </string-array>
+
+    <string-array name="array_payment_option">
+        <item>Single</item>
+        <item>Subscription</item>
+        <item>Certificate</item>
+        <item>Special</item>
+    </string-array>
+</resources>

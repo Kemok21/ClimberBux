@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border"
+        android:padding="4dp"
+        android:text="Name of Climber"/>
+
+    <TextView
+        android:id="@+id/type_payment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        android:padding="4dp"
+        android:background="@drawable/border"
+        android:text="single"/>
+
+    <EditText
+        android:id="@+id/payment"
+        android:layout_width="56dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        app:layout_constraintRight_toRightOf="parent"
+        android:gravity="center"
+        android:background="#626262"
+        android:paddingHorizontal="8dp"
+        android:text="1600"/>
+
+</android.support.constraint.ConstraintLayout>
