@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.jeko.climberbux">
 
     <application
@@ -11,8 +12,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,11 +27,24 @@
 
         <activity
             android:name=".ClimbersActivity"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity"
+            tools:targetApi="jelly_bean" />
         <activity
             android:name=".EditorActivity"
-            android:parentActivityName=".ClimbersActivity"></activity>
-        <activity android:name=".TrainingActivity"></activity>
+            android:parentActivityName=".ClimbersActivity"
+            tools:targetApi="jelly_bean" />
+        <activity
+            android:name=".TrainingActivity"
+            android:parentActivityName=".MainActivity"
+            tools:targetApi="jelly_bean" />
+        <activity
+            android:name=".OnDatesActivity"
+            android:parentActivityName=".MainActivity"
+            tools:targetApi="jelly_bean" />
+        <activity
+            android:name=".IncomeActivity"
+            android:parentActivityName=".MainActivity"
+            tools:targetApi="jelly_bean" />
     </application>
 
 </manifest>

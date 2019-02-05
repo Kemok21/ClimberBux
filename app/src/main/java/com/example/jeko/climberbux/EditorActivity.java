@@ -278,9 +278,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 this,
                 mCurrentClimberUri,
                 projection,
-                null,
-                null,
-                null
+                null, null, null
         );
     }
 

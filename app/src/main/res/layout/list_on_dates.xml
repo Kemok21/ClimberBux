@@ -1,7 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/climber_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/date_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#000"
+            android:text="0.00.0000"/>
+
+        <TextView
+            android:id="@+id/name_of_climber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:textColor="#000"
+            android:text="name of climber"
+            android:paddingLeft="24dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#000"
+            android:text="payed: "/>
+
+        <TextView
+            android:id="@+id/payed_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#000"
+            android:text="0"/>
+
+    </LinearLayout>
+
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/total_relative_layout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="#777"-->
+        <!--android:paddingHorizontal="16dp"-->
+        <!--android:visibility="gone">-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/date_text_view_total"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:text="0.00.0000" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/number_of_climber_text_view"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_toLeftOf="@id/climbers_text_view"-->
+            <!--android:text="0" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/climbers_text_view"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:text=" climbers" />-->
+
+
+        <!--<TextView-->
+            <!--android:id="@+id/income_text_view"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/climbers_text_view"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:text="0" />-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/climbers_text_view"-->
+            <!--android:layout_toLeftOf="@id/income_text_view"-->
+            <!--android:text="income: " />-->
+
+    <!--</RelativeLayout>-->
 
 </android.support.constraint.ConstraintLayout>

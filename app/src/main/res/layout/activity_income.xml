@@ -1,9 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".IncomeActivity">
+
+    <TextView
+        android:id="@+id/for_gran"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="For Gran:"
+        android:padding="16dp"
+        android:textSize="24sp"
+        android:textColor="#000"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/for_me"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="For Me:"
+        android:padding="16dp"
+        android:textSize="24sp"
+        android:textColor="#000"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/for_gran" />
+
+    <TextView
+        android:id="@+id/income_gran"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:paddingVertical="16dp"
+        android:textSize="24sp"
+        android:textColor="#000"
+        app:layout_constraintLeft_toRightOf="@id/for_gran"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/income_me"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:paddingVertical="16dp"
+        android:textSize="24sp"
+        android:textColor="#000"
+        app:layout_constraintLeft_toRightOf="@id/for_me"
+        app:layout_constraintTop_toBottomOf="@id/income_gran"/>
+
+
 
 </android.support.constraint.ConstraintLayout>

@@ -145,17 +145,17 @@ public class ClimbersProvider extends ContentProvider {
         }
         // Check that the gender is not null
         Integer gender = values.getAsInteger(ClimbersEntry.COLUMN_GENDER);
-        if (gender == null && !ClimbersEntry.isValidGender(gender)) {
+        if (gender == null && ClimbersEntry.isUnValidGender(gender)) {
             throw new IllegalArgumentException("Climber requires valid gender");
         }
         // Check that the rank is not null
         Integer rank = values.getAsInteger(ClimbersEntry.COLUMN_RANK);
-        if (rank == null && !ClimbersEntry.isValidRank(rank)) {
+        if (rank == null && ClimbersEntry.isUnValidRank(rank)) {
             throw new IllegalArgumentException("Climber requires valid rank");
         }
         // Check that the type payment is not null
         Integer payment = values.getAsInteger(ClimbersEntry.COLUMN_TYPE_PAYMENT);
-        if (payment == null && !ClimbersEntry.isValidPayment(payment)) {
+        if (payment == null && ClimbersEntry.isUnValidPayment(payment)) {
             throw new IllegalArgumentException("Climber requires valid type payment");
         }
         // Check that the name is not null
@@ -270,21 +270,21 @@ public class ClimbersProvider extends ContentProvider {
         // Check that the gender value is not null
         if (values.containsKey(ClimbersEntry.COLUMN_GENDER)) {
             Integer gender = values.getAsInteger(ClimbersEntry.COLUMN_GENDER);
-            if (gender == null && !ClimbersEntry.isValidGender(gender)) {
+            if (gender == null && ClimbersEntry.isUnValidGender(gender)) {
                 throw new IllegalArgumentException("Climber requires valid gender");
             }
         }
         // Check that the rank is not null
         if (values.containsKey(ClimbersEntry.COLUMN_RANK)) {
             Integer rank = values.getAsInteger(ClimbersEntry.COLUMN_RANK);
-            if (rank == null && !ClimbersEntry.isValidRank(rank)) {
+            if (rank == null && ClimbersEntry.isUnValidRank(rank)) {
                 throw new IllegalArgumentException("Climber requires valid rank");
             }
         }
         // Check that the type payment is not null
         if (values.containsKey(ClimbersEntry.COLUMN_TYPE_PAYMENT)) {
             Integer payment = values.getAsInteger(ClimbersEntry.COLUMN_TYPE_PAYMENT);
-            if (payment == null && !ClimbersEntry.isValidPayment(payment)) {
+            if (payment == null && ClimbersEntry.isUnValidPayment(payment)) {
                 throw new IllegalArgumentException("Climber requires valid type payment");
             }
         }

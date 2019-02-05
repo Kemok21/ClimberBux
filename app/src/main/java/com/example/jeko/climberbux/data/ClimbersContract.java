@@ -27,6 +27,7 @@ public class ClimbersContract {
         public static final String COLUMN_PAYED = "payed";
         public static final String COLUMN_VISITS = "visits";
         public static final String COLUMN_PHOTO = "photo";
+        public static final String COLUMN_IS_CHECKED = "is_checked";
 
         //Constant for gender
         public static final int GENDER_UNKNOWN = 0;
@@ -63,35 +64,26 @@ public class ClimbersContract {
         /**
          * Returns whether or not the given gender is {@link #GENDER_UNKNOWN}, {@link #GENDER_MALE}, {@link #GENDER_FEMALE}.
          */
-        public static boolean isValidGender(int gender) {
-            if (gender == GENDER_UNKNOWN || gender == GENDER_MALE || gender == GENDER_FEMALE) {
-                return true;
-            }
-            return false;
+        public static boolean isUnValidGender(int gender) {
+            return gender != GENDER_UNKNOWN && gender != GENDER_MALE && gender != GENDER_FEMALE;
         }
 
         /**
          * Returns whether or not the given payment type is {@link #TYPE_PAYMENT_SINGLE}, {@link #TYPE_PAYMENT_SUBSCRIPTION},
          * {@link #TYPE_PAYMENT_CERTIFICATE}, {@link #TYPE_PAYMENT_SPECIAL}.
          */
-        public static boolean isValidPayment(int payment) {
-            if (payment == TYPE_PAYMENT_SINGLE || payment == TYPE_PAYMENT_SUBSCRIPTION ||
-                    payment == TYPE_PAYMENT_CERTIFICATE || payment == TYPE_PAYMENT_SPECIAL) {
-                return true;
-            }
-            return false;
+        public static boolean isUnValidPayment(int payment) {
+            return payment != TYPE_PAYMENT_SINGLE && payment != TYPE_PAYMENT_SUBSCRIPTION &&
+                    payment != TYPE_PAYMENT_CERTIFICATE && payment != TYPE_PAYMENT_SPECIAL;
         }
 
         /**
          * Returns whether or not the given rank is {@link #RANK_BR}, {@link #RANK_THREE},
          * {@link #RANK_TWO}, {@link #RANK_ONE}, {@link #RANK_KMS}, {@link #RANK_MS},
          */
-        public static boolean isValidRank(int rank) {
-            if (rank == RANK_BR || rank == RANK_THREE || rank == RANK_TWO ||
-                    rank == RANK_ONE || rank == RANK_KMS || rank == RANK_MS) {
-                return true;
-            }
-            return false;
+        public static boolean isUnValidRank(int rank) {
+            return rank != RANK_BR && rank != RANK_THREE && rank != RANK_TWO &&
+                    rank != RANK_ONE && rank != RANK_KMS && rank != RANK_MS;
         }
     }
 
@@ -107,8 +99,10 @@ public class ClimbersContract {
         //Columns
         public static final String _ID = BaseColumns._ID;
         public static final String COLUMN_CLIMBER_ID = "climber_id";
+        public static final String COLUMN_CLIMBER_NAME = "climber_name";
         public static final String COLUMN_DATE = "date";
-        public static final String COLUMN_PAYED = "payed";
+        public static final String COLUMN_PAYED_TO_GRAN = "payed_to_gran";
+        public static final String COLUMN_PAYED_TO_ME = "payed_to_me";
 
         /**
          * The MIME type of {@link #CONTENT_URI} for a list of payments.
