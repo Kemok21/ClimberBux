@@ -15,6 +15,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class IncomeActivity extends AppCompatActivity {
+    
+    Calendar currentDate = Calendar.getInstance();
+    protected String mCurrentMonth = String.valueOf(currentDate.get(Calendar.MONTH) + 1);
+    protected String mCurrentYear = String.valueOf(currentDate.get(Calendar.YEAR));
 
     @BindView(R.id.income_gran)
     TextView incomeGranTextView;
@@ -35,8 +39,10 @@ public class IncomeActivity extends AppCompatActivity {
         };
 
         Cursor cursor = getContentResolver().query(PaymentsEntry.CONTENT_URI, projection, null, null, null);
-        int incomeGran = 0;
-        int incomeMe = 0;
+        int currentIncomeGran = 0;
+        int currentIncomeMe = 0;
+        int lastIncomGran = 0;
+        int lastIncomMe = 0;
         while (cursor.moveToNext()) {
             int indexPayedToGran = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_PAYED_TO_GRAN);
             int indexPayedToMe = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_PAYED_TO_ME);
@@ -46,17 +52,20 @@ public class IncomeActivity extends AppCompatActivity {
             int payedToMe = cursor.getInt(indexPayedToMe);
             String date = cursor.getString(indexDate);
 
-            Pattern pattern = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)");
+            Pattern pattern = Pattern.compile("\\d+\\.(\\d+)\\.(\\d+)");
             Matcher matcher = pattern.matcher(date);
 
             if (matcher.find()) {
-                String day = matcher.group(1);
-                String month = matcher.group(2);
-                String year = matcher.group(3);
+                String month = matcher.group(1);
+                String year = matcher.group(2);
             }
+            if (month.equals(currentMonth)) {
             //Подумать над логикой
-            incomeGran += payedToGran;
-            incomeMe += payedToMe;
+            	currentIncomeGran += payedToGran;
+            	currenrIncomeMe += payedToMe;
+            } else if (month.equals(lastMonth)) {
+                lastIncomGran += payedToGran;
+                lastIncomMe += payedToMe;
         }
 
         incomeGranTextView.setText(String.valueOf(incomeGran));
