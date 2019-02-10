@@ -11,46 +11,103 @@
         android:id="@+id/for_gran"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="For Gran:"
-        android:padding="16dp"
+        android:text="For Gran"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp"
         android:textSize="24sp"
         android:textColor="#000"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+        app:layout_constraintLeft_toRightOf="@id/this_month"
+        app:layout_constraintRight_toLeftOf="@id/for_me"/>
 
     <TextView
         android:id="@+id/for_me"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="For Me:"
-        android:padding="16dp"
-        android:textSize="24sp"
-        android:textColor="#000"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/for_gran" />
-
-    <TextView
-        android:id="@+id/income_gran"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        android:paddingVertical="16dp"
+        android:text="For Me"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp"
         android:textSize="24sp"
         android:textColor="#000"
         app:layout_constraintLeft_toRightOf="@id/for_gran"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
     <TextView
-        android:id="@+id/income_me"
+        android:id="@+id/this_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This month"
+        android:paddingLeft="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="16dp"
+        android:textSize="16sp"
+        android:textColor="#000"
+        app:layout_constraintTop_toBottomOf="@id/for_gran"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/last_mont"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Last month"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:textSize="16sp"
+        android:textColor="#000"
+        app:layout_constraintTop_toBottomOf="@id/this_month"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
+    <TextView
+    android:id="@+id/current_income_gran"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="0"
+    android:paddingTop="8dp"
+    android:paddingBottom="16dp"
+    android:textSize="16sp"
+    android:textColor="#000"
+    app:layout_constraintLeft_toRightOf="@id/this_month"
+    app:layout_constraintTop_toBottomOf="@id/for_gran"
+    app:layout_constraintRight_toLeftOf="@id/current_income_me"/>
+
+    <TextView
+        android:id="@+id/current_income_me"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0"
-        android:paddingVertical="16dp"
-        android:textSize="24sp"
+        android:paddingTop="8dp"
+        android:paddingBottom="16dp"
+        android:textSize="16sp"
         android:textColor="#000"
-        app:layout_constraintLeft_toRightOf="@id/for_me"
-        app:layout_constraintTop_toBottomOf="@id/income_gran"/>
+        app:layout_constraintLeft_toRightOf="@id/current_income_gran"
+        app:layout_constraintTop_toBottomOf="@id/for_me"
+        app:layout_constraintRight_toRightOf="parent"/>
 
+    <TextView
+        android:id="@+id/last_income_gran"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:paddingTop="16dp"
+        android:textSize="16sp"
+        android:textColor="#000"
+        app:layout_constraintLeft_toRightOf="@id/last_mont"
+        app:layout_constraintTop_toBottomOf="@id/current_income_gran"
+        app:layout_constraintRight_toLeftOf="@id/last_income_me"/>
 
+    <TextView
+        android:id="@+id/last_income_me"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:paddingTop="16dp"
+        android:textSize="16sp"
+        android:textColor="#000"
+        app:layout_constraintLeft_toRightOf="@id/last_income_gran"
+        app:layout_constraintTop_toBottomOf="@id/current_income_me"
+        app:layout_constraintRight_toRightOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

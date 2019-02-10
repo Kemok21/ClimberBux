@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.example.jeko.climberbux.data.ClimbersContract.PaymentsEntry;
 
+import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,13 +18,19 @@ import butterknife.ButterKnife;
 public class IncomeActivity extends AppCompatActivity {
     
     Calendar currentDate = Calendar.getInstance();
-    protected String mCurrentMonth = String.valueOf(currentDate.get(Calendar.MONTH) + 1);
-    protected String mCurrentYear = String.valueOf(currentDate.get(Calendar.YEAR));
+    private String mCurrentMonth = String.valueOf(currentDate.get(Calendar.MONTH) + 1);
+    private String mCurrentYear = String.valueOf(currentDate.get(Calendar.YEAR));
+    private String mLastMonth = String.valueOf(currentDate.get(Calendar.MONTH));
+    protected String mLastYear = String.valueOf(currentDate.get(Calendar.YEAR));
 
-    @BindView(R.id.income_gran)
-    TextView incomeGranTextView;
-    @BindView(R.id.income_me)
-    TextView incomeMeTextView;
+    @BindView(R.id.current_income_gran)
+    TextView currentIncomeGranTextView;
+    @BindView(R.id.current_income_me)
+    TextView currentIncomeMeTextView;
+    @BindView(R.id.last_income_gran)
+    TextView lastIncomeGranTextView;
+    @BindView(R.id.last_income_me)
+    TextView lastIncomeMeTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,19 +38,26 @@ public class IncomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_income);
         ButterKnife.bind(this);
 
+        if (mLastMonth.equals("0")) {
+            mLastMonth = "12";
+            mLastYear = String.valueOf(currentDate.get(Calendar.YEAR) - 1);
+        }
+
         String[] projection = new String[] {
                 PaymentsEntry._ID,
                 PaymentsEntry.COLUMN_PAYED_TO_ME,
                 PaymentsEntry.COLUMN_PAYED_TO_GRAN,
                 PaymentsEntry.COLUMN_DATE
         };
-
         Cursor cursor = getContentResolver().query(PaymentsEntry.CONTENT_URI, projection, null, null, null);
+
         int currentIncomeGran = 0;
         int currentIncomeMe = 0;
-        int lastIncomGran = 0;
-        int lastIncomMe = 0;
+        int lastIncomeGran = 0;
+        int lastIncomeMe = 0;
+
         while (cursor.moveToNext()) {
+
             int indexPayedToGran = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_PAYED_TO_GRAN);
             int indexPayedToMe = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_PAYED_TO_ME);
             int indexDate = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_DATE);
@@ -55,20 +69,25 @@ public class IncomeActivity extends AppCompatActivity {
             Pattern pattern = Pattern.compile("\\d+\\.(\\d+)\\.(\\d+)");
             Matcher matcher = pattern.matcher(date);
 
+            String month = null;
+            String year = null;
+
             if (matcher.find()) {
-                String month = matcher.group(1);
-                String year = matcher.group(2);
+                month = matcher.group(1);
+                year = matcher.group(2);
             }
-            if (month.equals(currentMonth)) {
-            //Подумать над логикой
+            if (month.equals(mCurrentMonth) && year.equals(mCurrentYear)) {
             	currentIncomeGran += payedToGran;
-            	currenrIncomeMe += payedToMe;
-            } else if (month.equals(lastMonth)) {
-                lastIncomGran += payedToGran;
-                lastIncomMe += payedToMe;
+            	currentIncomeMe += payedToMe;
+            } else if (month.equals(mLastMonth) && year.equals(mCurrentYear)) {
+                lastIncomeGran += payedToGran;
+                lastIncomeMe += payedToMe;
+            }
         }
 
-        incomeGranTextView.setText(String.valueOf(incomeGran));
-        incomeMeTextView.setText(String.valueOf(incomeMe));
+        currentIncomeGranTextView.setText(String.valueOf(currentIncomeGran));
+        currentIncomeMeTextView.setText(String.valueOf(currentIncomeMe));
+        lastIncomeGranTextView.setText(String.valueOf(lastIncomeGran));
+        lastIncomeMeTextView.setText(String.valueOf(lastIncomeMe));
     }
 }
