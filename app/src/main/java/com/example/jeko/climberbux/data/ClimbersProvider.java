@@ -16,23 +16,26 @@ import com.example.jeko.climberbux.data.ClimbersContract.PaymentsEntry;
 
 public class ClimbersProvider extends ContentProvider {
 
-    /** Tag for the log messages */
+    /**
+     * Tag for the log messages
+     */
     public static final String LOG_TAG = ClimbersProvider.class.getSimpleName();
-
-    private ClimbersDbHelper mDbHelper;
-
-    /** URI matcher code for the content URI for the climbers table */
+    /**
+     * URI matcher code for the content URI for the climbers table
+     */
     private static final int CLIMBERS = 100;
-
-    /** URI matcher code for the content URI for a single climber in the climbers table */
+    /**
+     * URI matcher code for the content URI for a single climber in the climbers table
+     */
     private static final int CLIMBER_ID = 101;
-
-    /** URI matcher code for the content URI for the payments table */
+    /**
+     * URI matcher code for the content URI for the payments table
+     */
     private static final int PAYMENTS = 200;
-
-    /** URI matcher code for the content URI for a single payment in the payments table */
+    /**
+     * URI matcher code for the content URI for a single payment in the payments table
+     */
     private static final int PAYMENT_ID = 201;
-
     /**
      * UriMatcher object to match a content URI to a corresponding code.
      * The input passed into the constructor represents the code to return for the root URI.
@@ -50,14 +53,18 @@ public class ClimbersProvider extends ContentProvider {
         sUriMatcher.addURI(PaymentsEntry.CONTENT_AUTHORITY, PaymentsEntry.PATH_PAYMENTS, PAYMENTS);
         sUriMatcher.addURI(PaymentsEntry.CONTENT_AUTHORITY, PaymentsEntry.PATH_PAYMENTS + "/#", PAYMENT_ID);
     }
+
+    private ClimbersDbHelper mDbHelper;
+
     /**
      * Initialize the provider and the database helper object.
      */
-        @Override
+    @Override
     public boolean onCreate() {
         mDbHelper = new ClimbersDbHelper(getContext());
         return true;
     }
+
     /**
      * Perform the query for the given URI. Use the given projection, selection, selection arguments, and sort order.
      */
@@ -79,7 +86,7 @@ public class ClimbersProvider extends ContentProvider {
                 break;
             case CLIMBER_ID:
                 selection = ClimbersEntry._ID + "=?";
-                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 cursor = database.query(ClimbersEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
@@ -88,7 +95,7 @@ public class ClimbersProvider extends ContentProvider {
                 break;
             case PAYMENT_ID:
                 selection = PaymentsEntry._ID + "=?";
-                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 cursor = database.query(PaymentsEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
@@ -100,6 +107,7 @@ public class ClimbersProvider extends ContentProvider {
 
         return cursor;
     }
+
     /**
      * Returns the MIME type of data for the content URI.
      */
@@ -120,6 +128,7 @@ public class ClimbersProvider extends ContentProvider {
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
         }
     }
+
     /**
      * Insert new data into the provider with the given ContentValues.
      */
@@ -215,7 +224,7 @@ public class ClimbersProvider extends ContentProvider {
                 break;
             case CLIMBER_ID:
                 selection = ClimbersEntry._ID + "=?";
-                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 rowsDeleted = database.delete(ClimbersEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             case PAYMENTS:
@@ -223,7 +232,7 @@ public class ClimbersProvider extends ContentProvider {
                 break;
             case PAYMENT_ID:
                 selection = PaymentsEntry._ID + "=?";
-                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 rowsDeleted = database.delete(PaymentsEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
@@ -234,6 +243,7 @@ public class ClimbersProvider extends ContentProvider {
         }
         return rowsDeleted;
     }
+
     /**
      * Updates the data at the given selection and selection arguments, with the new ContentValues.
      */
@@ -245,13 +255,13 @@ public class ClimbersProvider extends ContentProvider {
                 return updateClimber(uri, values, selection, selectionArgs);
             case CLIMBER_ID:
                 selection = ClimbersEntry._ID + "=?";
-                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateClimber(uri, values, selection, selectionArgs);
             case PAYMENTS:
                 return updatePayment(uri, values, selection, selectionArgs);
             case PAYMENT_ID:
                 selection = PaymentsEntry._ID + "=?";
-                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updatePayment(uri, values, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);

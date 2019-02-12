@@ -4,11 +4,10 @@ import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.jeko.climberbux.data.ClimbersContract.PaymentsEntry;
 
@@ -58,7 +57,7 @@ public class OnDatesActivity extends AppCompatActivity implements LoaderManager.
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] projection = new String[] {
+        String[] projection = new String[]{
                 PaymentsEntry._ID,
                 PaymentsEntry.COLUMN_CLIMBER_ID,
                 PaymentsEntry.COLUMN_CLIMBER_NAME,

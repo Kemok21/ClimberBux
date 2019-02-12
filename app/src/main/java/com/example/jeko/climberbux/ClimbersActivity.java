@@ -8,10 +8,9 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +23,7 @@ import com.example.jeko.climberbux.data.ClimbersContract.PaymentsEntry;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ClimbersActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class ClimbersActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int CLIMBER_LOADER = 0;
     ClimberCursorAdapter mCursorAdapter;
@@ -108,7 +107,7 @@ public class ClimbersActivity extends AppCompatActivity implements LoaderManager
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         // These are the Contacts rows that we will retrieve
-        String[] projection = new String[] {
+        String[] projection = new String[]{
                 ClimbersEntry._ID,
                 ClimbersEntry.COLUMN_NAME,
                 ClimbersEntry.COLUMN_GENDER,

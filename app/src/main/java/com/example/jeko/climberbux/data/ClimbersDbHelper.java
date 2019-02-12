@@ -12,11 +12,8 @@ public class ClimbersDbHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "accounting.db";
-
-    public ClimbersDbHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
+    private static final String DATABASE_ALTER_TABLE_1 = "ALTER TABLE "
+            + ClimbersEntry.TABLE_NAME + " ADD COLUMN " + ClimbersEntry.COLUMN_IS_CHECKED + " INTEGER NOT NULL DEFAULT 0;";
     String SQL_CREATE_ENTRIES_CLIMBERS =
             "CREATE TABLE " + ClimbersEntry.TABLE_NAME + "(" +
                     ClimbersEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -39,8 +36,9 @@ public class ClimbersDbHelper extends SQLiteOpenHelper {
                     PaymentsEntry.COLUMN_PAYED_TO_GRAN + " INTEGER NOT NULL DEFAULT 0," +
                     PaymentsEntry.COLUMN_PAYED_TO_ME + " INTEGER NOT NULL DEFAULT 0);";
 
-    private static final String DATABASE_ALTER_TABLE_1 = "ALTER TABLE "
-            + ClimbersEntry.TABLE_NAME + " ADD COLUMN " + ClimbersEntry.COLUMN_IS_CHECKED + " INTEGER NOT NULL DEFAULT 0;";
+    public ClimbersDbHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {

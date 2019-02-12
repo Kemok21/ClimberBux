@@ -1,9 +1,8 @@
 package com.example.jeko.climberbux;
 
 import android.database.Cursor;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.example.jeko.climberbux.data.ClimbersContract.PaymentsEntry;
@@ -16,13 +15,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class IncomeActivity extends AppCompatActivity {
-    
-    Calendar currentDate = Calendar.getInstance();
-    private String mCurrentMonth = String.valueOf(currentDate.get(Calendar.MONTH) + 1);
-    private String mCurrentYear = String.valueOf(currentDate.get(Calendar.YEAR));
-    private String mLastMonth = String.valueOf(currentDate.get(Calendar.MONTH));
-    protected String mLastYear = String.valueOf(currentDate.get(Calendar.YEAR));
 
+    Calendar currentDate = Calendar.getInstance();
+    protected String mLastYear = String.valueOf(currentDate.get(Calendar.YEAR));
     @BindView(R.id.current_income_gran)
     TextView currentIncomeGranTextView;
     @BindView(R.id.current_income_me)
@@ -31,6 +26,9 @@ public class IncomeActivity extends AppCompatActivity {
     TextView lastIncomeGranTextView;
     @BindView(R.id.last_income_me)
     TextView lastIncomeMeTextView;
+    private String mCurrentMonth = String.valueOf(currentDate.get(Calendar.MONTH) + 1);
+    private String mCurrentYear = String.valueOf(currentDate.get(Calendar.YEAR));
+    private String mLastMonth = String.valueOf(currentDate.get(Calendar.MONTH));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +41,7 @@ public class IncomeActivity extends AppCompatActivity {
             mLastYear = String.valueOf(currentDate.get(Calendar.YEAR) - 1);
         }
 
-        String[] projection = new String[] {
+        String[] projection = new String[]{
                 PaymentsEntry._ID,
                 PaymentsEntry.COLUMN_PAYED_TO_ME,
                 PaymentsEntry.COLUMN_PAYED_TO_GRAN,
@@ -77,8 +75,8 @@ public class IncomeActivity extends AppCompatActivity {
                 year = matcher.group(2);
             }
             if (month.equals(mCurrentMonth) && year.equals(mCurrentYear)) {
-            	currentIncomeGran += payedToGran;
-            	currentIncomeMe += payedToMe;
+                currentIncomeGran += payedToGran;
+                currentIncomeMe += payedToMe;
             } else if (month.equals(mLastMonth) && year.equals(mCurrentYear)) {
                 lastIncomeGran += payedToGran;
                 lastIncomeMe += payedToMe;

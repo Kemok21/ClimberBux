@@ -6,19 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.jeko.climberbux.data.ClimbersContract;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class OnDateCursorAdapter extends CursorAdapter {
-//    private ArrayList<String> dates = new ArrayList<>();
+    //    private ArrayList<String> dates = new ArrayList<>();
     private LayoutInflater mInflate;
 //    private int countOfClimbers = 0;
 //    private int countOfPayed = 0;

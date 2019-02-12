@@ -6,7 +6,8 @@ import android.provider.BaseColumns;
 
 public class ClimbersContract {
 
-    private ClimbersContract() {}
+    private ClimbersContract() {
+    }
 
     public static class ClimbersEntry implements BaseColumns {
 

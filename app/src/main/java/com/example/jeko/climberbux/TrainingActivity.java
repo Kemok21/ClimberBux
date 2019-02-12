@@ -7,17 +7,16 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
@@ -32,47 +31,39 @@ import android.widget.Toast;
 
 import com.example.jeko.climberbux.data.ClimbersContract.ClimbersEntry;
 import com.example.jeko.climberbux.data.ClimbersContract.PaymentsEntry;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class TrainingActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final int CLIMBER_LOADER = 0;
     public final static String FILENAME = "training.json"; // имя файла
+    private static final int CLIMBER_LOADER = 0;
+    @BindView(R.id.list_view_climbers_of_training)
+    ListView trainingListView;
+    @BindView(R.id.empty_view)
+    TextView emptyView;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
     private Cursor mCursor;
+    private CalendarDay mCurrentDay = CalendarDay.today();
     private JSONObject trainingJsonObject = new JSONObject();
     // climberArrayList bond to adapter
     private ArrayList<Climber> climberArrayList = new ArrayList<>();
     private TrainingAdapter trainingAdapter;
-
-    @BindView(R.id.list_view_climbers_of_training)
-    ListView trainingListView;
-
-    @BindView(R.id.empty_view)
-    TextView emptyView;
-
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
-
-//    @BindView(R.id.payment)
-//    TextView paymentTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +73,6 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
 
         // Чтение из training.json
         trainingJsonObject = readFileTraining();
-
-        emptyView.setText(getResources().getString(R.string.empty_training));
 
         trainingListView.setEmptyView(emptyView);
 
@@ -106,20 +95,22 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.MATCH_PARENT);
+
                 // EditText for payment to Gran
                 final EditText inputGran = new EditText(TrainingActivity.this);
                 inputGran.setHint("Payment to Gran");
-                inputGran.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
+                inputGran.setInputType(InputType.TYPE_CLASS_NUMBER);
                 inputGran.setLayoutParams(lp);
                 String toGran = climberArrayList.get(position).getPaymentGran();
                 if (toGran.equals("0")) {
                     inputGran.setText("");
                 } else inputGran.setText(toGran);
                 layout.addView(inputGran);
+
                 // EditText for payment to Me
                 final EditText inputMe = new EditText(TrainingActivity.this);
                 inputMe.setHint("Payment to Me");
-                inputMe.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
+                inputMe.setInputType(InputType.TYPE_CLASS_NUMBER);
                 inputMe.setLayoutParams(lp);
                 String toMe = climberArrayList.get(position).getPaymentMe();
                 if (toMe.equals("0")) {
@@ -137,7 +128,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                         String paymentToMe = inputMe.getText().toString();
                         if (paymentToMe.equals("")) paymentToMe = "0";
 
-                        // Добавляем новое значение в trainingJsonArray и climberArrayList
+                        // Добавляем новое значение в trainingJsonObject и climberArrayList
                         try {
                             String keyId = String.valueOf(climberArrayList.get(position).getId());
                             JSONObject climberJsonObject = trainingJsonObject.getJSONObject(keyId);
@@ -161,6 +152,12 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                         String keyId = String.valueOf(climberArrayList.get(position).getId());
                         trainingJsonObject.remove(keyId);
                         climberArrayList.remove(position);
+
+                        Uri currentClimberUri = ContentUris.withAppendedId(ClimbersEntry.CONTENT_URI, Integer.parseInt(keyId));
+                        ContentValues valuesFalse = new ContentValues();
+                        valuesFalse.put(ClimbersEntry.COLUMN_IS_CHECKED, 0);
+                        getContentResolver().update(currentClimberUri, valuesFalse, null, null);
+
                         trainingAdapter.notifyDataSetChanged();
                     }
                 });
@@ -174,6 +171,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(View v) {
+
                 // setup the alert builder
                 AlertDialog.Builder builder = new AlertDialog.Builder(TrainingActivity.this);
                 builder.setTitle("Choose a climber");
@@ -185,7 +183,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                 DialogInterface.OnMultiChoiceClickListener multiChoice = new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                        ListView lv = ((AlertDialog) dialog).getListView();
+//                        ListView lv = ((AlertDialog) dialog).getListView();
                         Log.v("WHICH", String.valueOf(which));
                         if (isChecked) {
                             Log.v("isChecked", String.valueOf(which));
@@ -195,7 +193,8 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                             int id = mCursor.getInt(mCursor.getColumnIndexOrThrow(ClimbersEntry._ID));
                             Uri currentClimberUri = ContentUris.withAppendedId(ClimbersEntry.CONTENT_URI, id);
                             listTrue.add(currentClimberUri);
-                            if (listFalse.contains(currentClimberUri)) listFalse.remove(currentClimberUri);
+                            if (listFalse.contains(currentClimberUri))
+                                listFalse.remove(currentClimberUri);
 
                         } else {
                             Log.v("isNoChecked", String.valueOf(which));
@@ -205,7 +204,8 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                             int id = mCursor.getInt(mCursor.getColumnIndexOrThrow(ClimbersEntry._ID));
                             Uri currentClimberUri = ContentUris.withAppendedId(ClimbersEntry.CONTENT_URI, id);
                             listFalse.add(currentClimberUri);
-                            if (listTrue.contains(currentClimberUri)) listTrue.remove(currentClimberUri);
+                            if (listTrue.contains(currentClimberUri))
+                                listTrue.remove(currentClimberUri);
                         }
 
 //                        int id = mCursor.getInt(mCursor.getColumnIndexOrThrow(ClimbersEntry._ID));
@@ -219,13 +219,16 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
                         ContentValues valuesTrue = new ContentValues();
                         valuesTrue.put(ClimbersEntry.COLUMN_IS_CHECKED, 1);
                         ContentValues valuesFalse = new ContentValues();
                         valuesFalse.put(ClimbersEntry.COLUMN_IS_CHECKED, 0);
+
                         // Снятие и удаление анчекнутых Climbers
                         for (int i = 0; i < listFalse.size(); i++) {
                             getContentResolver().update(listFalse.get(i), valuesFalse, null, null);
+
                             // Цикл для нахождения индекса элемента в climberArrayList
                             for (int j = 0; j < climberArrayList.size(); j++) {
                                 Climber climber = climberArrayList.get(j);
@@ -252,7 +255,8 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
 
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {}
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
                 });
 //                builder.setCursor(cursor1, new DialogInterface.OnMultiChoiceClickListener() {
 //                    @Override
@@ -301,6 +305,9 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                 Log.v("Popalo_0", "knlkjnl");
                 endOfTraining();
                 return true;
+            case R.id.action_date_of_training:
+                dateOfTraining();
+                return true;
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(TrainingActivity.this);
                 return true;
@@ -331,14 +338,14 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
 
         String[] projection = {ClimbersEntry._ID, ClimbersEntry.COLUMN_NAME, ClimbersEntry.COLUMN_TYPE_PAYMENT};
         String selection = ClimbersEntry._ID + "=?";
-        String[] selectionArgs = new String[] {String.valueOf(choice)};
+        String[] selectionArgs = new String[]{String.valueOf(choice)};
         Cursor cursor = getContentResolver().query(ClimbersEntry.CONTENT_URI, projection, selection, selectionArgs, null);
 
         int idColumnIndex = cursor.getColumnIndexOrThrow(ClimbersEntry._ID);
         int nameColumnIndex = cursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_NAME);
         int typePaymentColumnIndex = cursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_TYPE_PAYMENT);
 
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             // достаем данные из курсора
             final long climberId = cursor.getLong(idColumnIndex);
             final String climberName = cursor.getString(nameColumnIndex);
@@ -369,12 +376,13 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                 }
 //                trainingAdapter.setNotifyOnChange(true);
                 trainingJsonObject.put(String.valueOf(climberId), climber);
+
                 // Добавляет новый элемент trainingJsonObject в climberArrayList
-                addClimberToArrayList(trainingJsonObject.names().length()-1);
-                Log.v("climberArrayList in -1", climberArrayList.get(climberArrayList.size()-1).toString());
+                addClimberToArrayList(trainingJsonObject.names().length() - 1);
+                Log.v("climberArrayList in -1", climberArrayList.get(climberArrayList.size() - 1).toString());
+
                 // Обновляет список в TrainingActivity
                 trainingAdapter.notifyDataSetChanged();
-//                trainingAdapter.add(climberArrayList.get(climberArrayList.size()-1));
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -387,23 +395,13 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
     // Read File training.json
     private JSONObject readFileTraining() {
         JSONObject jsonObject = new JSONObject();
-//        JSONArray jsonArray = new JSONArray();
 
         try {
             InputStream inputStream = openFileInput(FILENAME);
             if (inputStream != null) {
                 InputStreamReader isr = new InputStreamReader(inputStream);
                 BufferedReader reader = new BufferedReader(isr);
-//                String line;
-//                StringBuilder builder = new StringBuilder();
-//                while ((line = reader.readLine()) != null) {
-//                    builder.append(line + "\n");
-//                }
-//                inputStream.close();
-//                Log.v("NEXT", builder.toString());
-//                jsonArray = new JSONArray(builder.toString());
                 String text = reader.readLine();
-                if (text.equals("[]")) text = "{}";
                 Log.v("NEXT", text);
 
                 jsonObject = new JSONObject(text);
@@ -417,7 +415,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
     }
 
     // Write File training.json
-    private void saveTrainingJsonObject(){
+    private void saveTrainingJsonObject() {
         try {
             OutputStream outputStream = openFileOutput(FILENAME, Context.MODE_PRIVATE);
             OutputStreamWriter osw = new OutputStreamWriter(outputStream);
@@ -431,12 +429,11 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void endOfTraining() {
-        Calendar currentDate = Calendar.getInstance();
-        String day = String.valueOf(currentDate.get(Calendar.DAY_OF_MONTH));
-        String month = String.valueOf(currentDate.get(Calendar.MONTH) + 1);
-        String year = String.valueOf(currentDate.get(Calendar.YEAR));
-        String date = day+"."+month+"."+year;
-        Log.v("date", date);
+        String day = String.valueOf(mCurrentDay.getDay());
+        String month = String.valueOf(mCurrentDay.getMonth());
+        String year = String.valueOf(mCurrentDay.getYear());
+        String date = day + "." + month + "." + year;
+        Log.v("DATE", date);
         int count = climberArrayList.size();
         for (int i = count - 1; i >= 0; i--) {
             Climber climber = climberArrayList.get(i);
@@ -444,6 +441,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
             String climberName = climber.getName();
             int payedGran = Integer.parseInt(climber.getPaymentGran());
             int payedMe = Integer.parseInt(climber.getPaymentMe());
+
             // Добавление в Payments
             ContentValues paymentValues = new ContentValues();
             paymentValues.put(PaymentsEntry.COLUMN_CLIMBER_ID, climberId);
@@ -452,6 +450,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
             paymentValues.put(PaymentsEntry.COLUMN_PAYED_TO_GRAN, payedGran);
             paymentValues.put(PaymentsEntry.COLUMN_PAYED_TO_ME, payedMe);
             Uri newUri = getContentResolver().insert(PaymentsEntry.CONTENT_URI, paymentValues);
+
             // Изменить Climber isChecked
             Uri currentClimberUri = ContentUris.withAppendedId(ClimbersEntry.CONTENT_URI, climberId);
             ContentValues climberValues = new ContentValues();
@@ -463,6 +462,48 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
         }
         trainingAdapter.notifyDataSetChanged();
         saveTrainingJsonObject();
+    }
+
+    private void dateOfTraining() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(TrainingActivity.this);
+        builder.setTitle("Choose a date ");
+
+        LinearLayout layout = new LinearLayout(TrainingActivity.this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+
+        MaterialCalendarView calendarView = new MaterialCalendarView(TrainingActivity.this);
+
+        calendarView.setSelectedDate(mCurrentDay);
+
+        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                mCurrentDay = date;
+            }
+        });
+
+        calendarView.setLayoutParams(lp);
+        layout.addView(calendarView);
+        builder.setView(layout);
+
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mCurrentDay = CalendarDay.today();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
@@ -485,7 +526,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] projection = new String[] {
+        String[] projection = new String[]{
                 ClimbersEntry._ID,
                 ClimbersEntry.COLUMN_NAME,
                 ClimbersEntry.COLUMN_IS_CHECKED
@@ -507,30 +548,4 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
     public void onLoaderReset(Loader<Cursor> loader) {
         mCursor = null;
     }
-
-
-    //    @Override
-//    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-//        String[] projection = new String[] {
-//                ClimbersEntry._ID,
-//                ClimbersEntry.COLUMN_NAME,
-//                ClimbersEntry.COLUMN_TYPE_PAYMENT
-//        };
-//
-//        String selection = ClimbersEntry._ID + "=?";
-//        File internalStorageDir = getFilesDir();
-////        File training = new File(internalStorageDir, "training.csv");
-//        //Продолжить!
-//        return null;
-//    }
-//
-//    @Override
-//    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-//
-//    }
-//
-//    @Override
-//    public void onLoaderReset(Loader<Cursor> loader) {
-//
-//    }
 }
