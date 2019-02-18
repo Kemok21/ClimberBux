@@ -8,13 +8,51 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <!--<style name="AppTheme.NoActionBar">-->
+        <!--<item name="windowActionBar">false</item>-->
+        <!--<item name="windowNoTitle">true</item>-->
+    <!--</style>-->
+
+    <!--<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />-->
+
+    <!--<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />-->
+
+    <style name="MainButton" parent="Base.Widget.AppCompat.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/margin_horizontal_activity_main_button</item>
+        <item name="android:layout_marginRight">@dimen/margin_horizontal_activity_main_button</item>
+        <item name="android:paddingTop">@dimen/padding_vertical_activity_main_button</item>
+        <item name="android:paddingBottom">@dimen/padding_vertical_activity_main_button</item>
+        <item name="android:textSize">@dimen/text_size_activity_main_button</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="TextViewInListClimber">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/text_color_app</item>
+        <item name="android:textSize">@dimen/text_size_list_climber</item>
+    </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="EditTextInActivityEditor">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/text_color_app</item>
+        <item name="android:textSize">@dimen/text_size_activity_editor</item>
+    </style>
+
+    <style name="SpinnerInActivityEditor">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/height_spinner</item>
+        <item name="android:paddingLeft">@dimen/padding_left_spinner</item>
+        <item name="android:textColor">@color/text_color_app</item>
+        <item name="android:textSize">@dimen/text_size_spinner</item>
+        <item name="android:spinnerMode">dropdown</item>
+    </style>
 
 </resources>
+
+
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:textColor="#000"-->
+    <!--android:textSize="16sp"-->
