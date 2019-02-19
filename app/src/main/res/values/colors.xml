@@ -5,4 +5,5 @@
     <color name="colorAccent">#2f8c23</color>
 
     <color name="text_color_app">#000000</color>
+    <color name="text_color_payment">#888888</color>
 </resources>

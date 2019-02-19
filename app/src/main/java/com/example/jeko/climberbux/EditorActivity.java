@@ -58,9 +58,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             String selection = (String) parent.getItemAtPosition(position);
             if (!TextUtils.isEmpty(selection)) {
-                if (selection.equals("Male")) {
+                if (selection.equals(getString(R.string.male))) {
                     mGender = ClimbersEntry.GENDER_MALE;
-                } else if (selection.equals("Female")) {
+                } else if (selection.equals(getString(R.string.female))) {
                     mGender = ClimbersEntry.GENDER_FEMALE;
                 } else {
                     mGender = ClimbersEntry.GENDER_UNKNOWN;
@@ -80,15 +80,15 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             String selection = (String) parent.getItemAtPosition(position);
             if (!TextUtils.isEmpty(selection)) {
-                if (selection.equals("3")) {
+                if (selection.equals(getString(R.string.three))) {
                     mRank = ClimbersEntry.RANK_THREE;
-                } else if (selection.equals("2")) {
+                } else if (selection.equals(getString(R.string.tow))) {
                     mRank = ClimbersEntry.RANK_TWO;
-                } else if (selection.equals("1")) {
+                } else if (selection.equals(getString(R.string.one))) {
                     mRank = ClimbersEntry.RANK_ONE;
-                } else if (selection.equals("KMS")) {
+                } else if (selection.equals(getString(R.string.kms))) {
                     mRank = ClimbersEntry.RANK_KMS;
-                } else if (selection.equals("MS")) {
+                } else if (selection.equals(getString(R.string.ms))) {
                     mRank = ClimbersEntry.RANK_MS;
                 } else {
                     mRank = ClimbersEntry.RANK_BR;
@@ -108,11 +108,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             String selection = (String) parent.getItemAtPosition(position);
             if (!TextUtils.isEmpty(selection)) {
-                if (selection.equals("Subscription")) {
+                if (selection.equals(getString(R.string.subscription))) {
                     mPayment = ClimbersEntry.TYPE_PAYMENT_SUBSCRIPTION;
-                } else if (selection.equals("Certificate")) {
+                } else if (selection.equals(getString(R.string.certificate))) {
                     mPayment = ClimbersEntry.TYPE_PAYMENT_CERTIFICATE;
-                } else if (selection.equals("Special")) {
+                } else if (selection.equals(getString(R.string.special))) {
                     mPayment = ClimbersEntry.TYPE_PAYMENT_SPECIAL;
                 } else {
                     mPayment = ClimbersEntry.TYPE_PAYMENT_SINGLE;
@@ -142,12 +142,12 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         // Check get data of intent
         if (mCurrentClimberUri == null) {
-            setTitle("Add a Climber");
+            setTitle(getString(R.string.add_a_climber_title));
             // Invalidate the options menu, so the "Delete" menu option can be hidden.
             // (It doesn't make sense to delete a book that hasn't been created yet.)
             invalidateOptionsMenu();
         } else {
-            setTitle("Edit Climber");
+            setTitle(getString(R.string.edit_climber_title));
             getSupportLoaderManager().initLoader(CLIMBER_LOADER, null, this);
         }
     }
@@ -208,16 +208,16 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             // Insert a new row for climber in the database, returning the ID of that new row.
             Uri newUri = getContentResolver().insert(ClimbersEntry.CONTENT_URI, values);
             if (newUri == null) {
-                Toast.makeText(this, "Error with saving book", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.error_saving_climber_toast), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Climber saved", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.saved_climber_toast), Toast.LENGTH_SHORT).show();
             }
         } else {
             int rowsAffected = getContentResolver().update(mCurrentClimberUri, values, null, null);
             if (rowsAffected == 0) {
-                Toast.makeText(this, "Error with updating climber", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.error_updating_climber_toast), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Climber updated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.updated_climber_toast), Toast.LENGTH_SHORT).show();
             }
         }
         // Close the Activity
@@ -228,9 +228,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         if (mCurrentClimberUri != null) {
             int rowsDeleted = getContentResolver().delete(mCurrentClimberUri, null, null);
             if (rowsDeleted == 0) {
-                Toast.makeText(this, "Error with deleting climber", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.error_deleting_climber_toast), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Climber deleted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.deleted_climber_toast), Toast.LENGTH_SHORT).show();
             }
         }
         //Close the Activity

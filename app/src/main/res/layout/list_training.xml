@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,7 +12,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/border"
         android:padding="4dp"
-        android:textColor="#000"
+        android:textColor="@color/text_color_app"
         android:textSize="16sp"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -20,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
-        android:textColor="#000"
+        android:textColor="@color/text_color_app"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/name" />
 
@@ -28,11 +29,11 @@
         android:id="@+id/payment"
         android:layout_width="56dp"
         android:layout_height="32dp"
-        android:background="#888"
+        android:background="@color/text_color_payment"
         android:focusable="false"
         android:gravity="center"
         android:paddingHorizontal="8dp"
-        android:textColor="#000"
+        android:textColor="@color/text_color_app"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/name" />
 

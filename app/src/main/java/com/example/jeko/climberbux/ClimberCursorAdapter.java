@@ -48,7 +48,7 @@ public class ClimberCursorAdapter extends CursorAdapter {
         String[] genders = context.getResources().getStringArray(R.array.array_gender_option);
         holder.climberGender.setText(genders[gender]);
         if (age != 0) holder.climberAge.setText(String.valueOf(age));
-        else holder.climberAge.setText("—");
+        else holder.climberAge.setText(mInflate.getContext().getString(R.string.dash_in_age_for_zero));
     }
 
     static class ViewHolder {

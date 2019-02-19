@@ -49,10 +49,17 @@
         <item name="android:spinnerMode">dropdown</item>
     </style>
 
+    <style name="TextInActivityIncome">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/text_color_app</item>
+        <item name="android:textSize">@dimen/text_size_activity_income</item>
+    </style>
+
+    <style name="TextViewInListOnDate">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <!--Не использованая-->
+    </style>
+
 </resources>
-
-
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:textColor="#000"-->
-    <!--android:textSize="16sp"-->

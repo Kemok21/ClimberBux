@@ -302,7 +302,6 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_end_of_training:
-                Log.v("Popalo_0", "knlkjnl");
                 endOfTraining();
                 return true;
             case R.id.action_date_of_training:
@@ -402,7 +401,6 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                 InputStreamReader isr = new InputStreamReader(inputStream);
                 BufferedReader reader = new BufferedReader(isr);
                 String text = reader.readLine();
-                Log.v("NEXT", text);
 
                 jsonObject = new JSONObject(text);
             }

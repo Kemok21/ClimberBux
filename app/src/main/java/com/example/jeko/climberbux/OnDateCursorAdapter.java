@@ -36,18 +36,13 @@ public class OnDateCursorAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder holder = (ViewHolder) view.getTag();
         // Find the columns of payments attributes that we're interested in
-//        int idColumnIndex = cursor.getColumnIndexOrThrow(ClimbersContract.PaymentsEntry._ID);
         int dateColumnIndex = cursor.getColumnIndexOrThrow(ClimbersContract.PaymentsEntry.COLUMN_DATE);
-//        int climberIdColumnIndex = cursor.getColumnIndexOrThrow(ClimbersContract.PaymentsEntry.COLUMN_CLIMBER_ID);
         int climberNameColumnIndex = cursor.getColumnIndexOrThrow(ClimbersContract.PaymentsEntry.COLUMN_CLIMBER_NAME);
         int payedGranColumnIndex = cursor.getColumnIndexOrThrow(ClimbersContract.PaymentsEntry.COLUMN_PAYED_TO_GRAN);
         int payedMeColumnIndex = cursor.getColumnIndexOrThrow(ClimbersContract.PaymentsEntry.COLUMN_PAYED_TO_ME);
 
-//        if (dates.contains())
         // Extract properties from cursor
-//        long paymentId = cursor.getLong(idColumnIndex);
         String date = cursor.getString(dateColumnIndex);
-//        long climberId = cursor.getLong(climberIdColumnIndex);
         String climberName = cursor.getString(climberNameColumnIndex);
         int payedGarn = cursor.getInt(payedGranColumnIndex);
         int payedMy = cursor.getInt(payedMeColumnIndex);

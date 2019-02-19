@@ -8,9 +8,49 @@
     <string name="training_on_dates">Training on dates</string>
     <string name="sum_of_income">Sum of income</string>
 
+    <!--For climber activity-->
+    <string name="dash_in_age_for_zero">—</string>
+
     <!--For editor activity-->
     <string name="name">Name</string>
     <string name="age">Age</string>
+
+    <string name="unknown">Unknown</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+
+    <string name="br">b/r</string>
+    <string name="three">3</string>
+    <string name="tow">2</string>
+    <string name="one">1</string>
+    <string name="kms">KMS</string>
+    <string name="ms">MS</string>
+
+    <string name="single">Single</string>
+    <string name="subscription">Subscription</string>
+    <string name="certificate">Certificate</string>
+    <string name="special">Special</string>
+
+    <string name="add_a_climber_title">Add a Climber</string>
+    <string name="edit_climber_title">Edit Climber</string>
+
+    <string name="error_saving_climber_toast">Error with saving climber</string>
+    <string name="saved_climber_toast">Climber saved</string>
+    <string name="error_updating_climber_toast">Error with updating climber</string>
+    <string name="updated_climber_toast">Climber updated</string>
+    <string name="error_deleting_climber_toast">Error with deleting climber</string>
+    <string name="deleted_climber_toast">Climber deleted</string>
+
+    <!--For income activity-->
+    <string name="for_gran">For Gran</string>
+    <string name="for_me">For Me</string>
+    <string name="this_month">This month</string>
+    <string name="last_month">Last month</string>
+
+    <!--For training activity-->
+    <string name="end_of_training">End of training</string>
+    <string name="empty_training">Training empty yet. Press plus to add any climber.</string>
+
 
     <string name="add">Add</string>
     <string name="delete">Delete</string>
@@ -18,6 +58,8 @@
 
 
 
-    <string name="end_of_training">End of training</string>
-    <string name="empty_training">Training empty yet. Press plus to add any climber.</string>
+
+
+
+
 </resources>

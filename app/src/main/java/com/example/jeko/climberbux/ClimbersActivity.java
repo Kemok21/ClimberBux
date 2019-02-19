@@ -75,34 +75,34 @@ public class ClimbersActivity extends AppCompatActivity implements LoaderManager
         return super.onOptionsItemSelected(item);
     }
 
-    private void insertClimber() {
-
-        String name = "Евгения Леонова";
-        int gender = ClimbersEntry.GENDER_FEMALE;
-        int age = 29;
-        int rank = ClimbersEntry.RANK_KMS;
-        int typePayment = ClimbersEntry.TYPE_PAYMENT_SPECIAL;
-        String visit = "{[" + System.currentTimeMillis() + "]}";
-
-        ContentValues values = new ContentValues();
-        values.put(ClimbersEntry.COLUMN_NAME, name);
-        values.put(ClimbersEntry.COLUMN_GENDER, gender);
-        values.put(ClimbersEntry.COLUMN_AGE, age);
-        values.put(ClimbersEntry.COLUMN_RANK, rank);
-        values.put(ClimbersEntry.COLUMN_TYPE_PAYMENT, typePayment);
-        values.put(ClimbersEntry.COLUMN_VISITS, visit);
-
-        Uri newUri = getContentResolver().insert(ClimbersEntry.CONTENT_URI, values);
-    }
-
-    private void insertPayment() {
-        long climberId = 1;
-        long date = System.currentTimeMillis();
-        ContentValues values = new ContentValues();
-        values.put(PaymentsEntry.COLUMN_CLIMBER_ID, climberId);
-        values.put(PaymentsEntry.COLUMN_DATE, date);
-        Uri newUri = getContentResolver().insert(PaymentsEntry.CONTENT_URI, values);
-    }
+//    private void insertClimber() {
+//
+//        String name = "Евгения Леонова";
+//        int gender = ClimbersEntry.GENDER_FEMALE;
+//        int age = 29;
+//        int rank = ClimbersEntry.RANK_KMS;
+//        int typePayment = ClimbersEntry.TYPE_PAYMENT_SPECIAL;
+//        String visit = "{[" + System.currentTimeMillis() + "]}";
+//
+//        ContentValues values = new ContentValues();
+//        values.put(ClimbersEntry.COLUMN_NAME, name);
+//        values.put(ClimbersEntry.COLUMN_GENDER, gender);
+//        values.put(ClimbersEntry.COLUMN_AGE, age);
+//        values.put(ClimbersEntry.COLUMN_RANK, rank);
+//        values.put(ClimbersEntry.COLUMN_TYPE_PAYMENT, typePayment);
+//        values.put(ClimbersEntry.COLUMN_VISITS, visit);
+//
+//        Uri newUri = getContentResolver().insert(ClimbersEntry.CONTENT_URI, values);
+//    }
+//
+//    private void insertPayment() {
+//        long climberId = 1;
+//        long date = System.currentTimeMillis();
+//        ContentValues values = new ContentValues();
+//        values.put(PaymentsEntry.COLUMN_CLIMBER_ID, climberId);
+//        values.put(PaymentsEntry.COLUMN_DATE, date);
+//        Uri newUri = getContentResolver().insert(PaymentsEntry.CONTENT_URI, values);
+//    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
