@@ -1,11 +1,16 @@
 package com.example.jeko.climberbux;
 
+import android.app.Application;
 import android.content.Context;
+import android.content.res.Resources;
+
 import com.example.jeko.climberbux.data.ClimbersContract.ClimbersEntry;
+
+import java.util.ResourceBundle;
 
 public class Climber {
 
-    Context context;
+    Resources resources = Resources.getSystem();
     private int mId;
     private String mName;
     private int mTypePayment;
@@ -31,13 +36,13 @@ public class Climber {
     public String getTypePayment() {
         switch (mTypePayment) {
             case ClimbersEntry.TYPE_PAYMENT_SINGLE:
-                return context.getString(R.string.single);
+                return "single";
             case ClimbersEntry.TYPE_PAYMENT_SUBSCRIPTION:
-                return context.getString(R.string.subscription);
+                return "subscription";
             case ClimbersEntry.TYPE_PAYMENT_CERTIFICATE:
-                return context.getString(R.string.certificate);
+                return "certificate";
             default:
-                return context.getString(R.string.special);
+                return "special";
         }
     }
 

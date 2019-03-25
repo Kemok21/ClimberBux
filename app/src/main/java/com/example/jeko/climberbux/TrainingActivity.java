@@ -172,124 +172,83 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
             @Override
             public void onClick(View v) {
 
-                // setup the alert builder
-                AlertDialog.Builder builder = new AlertDialog.Builder(TrainingActivity.this);
+                ArrayList<String> listNames = new ArrayList<>();
+                ArrayList<Long> listIds = new ArrayList<>();
+                ArrayList<Integer> listChecks = new ArrayList<>();
+
+                // Наполнение списков listNames, listIds, listChecks
+                mCursor.moveToPosition(-1);
+                while (mCursor.moveToNext()) {
+                    long id = mCursor.getLong(mCursor.getColumnIndexOrThrow(ClimbersEntry._ID));
+                    String name = mCursor.getString(mCursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_NAME));
+                    int checked = mCursor.getInt(mCursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_IS_CHECKED));
+
+                    listIds.add(id);
+                    listNames.add(name);
+                    listChecks.add(checked);
+                }
+                // Списки в массивы names, ids, isChecks
+                String[] names = new String[listNames.size()];
+                names = listNames.toArray(names);
+                Long[] ids = new Long[listIds.size()];
+                ids = listIds.toArray(ids);
+                boolean isChecks[] = new boolean[listChecks.size()];
+                for (int i = 0; i < isChecks.length; i++) {
+                    isChecks[i] = (listChecks.get(i) == 1) ? true : false;
+                }
+
+                final AlertDialog.Builder builder = new AlertDialog.Builder(TrainingActivity.this);
                 builder.setTitle("Choose a climber");
-                builder.setCancelable(true);
+                builder.setCancelable(false);
 
-                final ArrayList<Uri> listTrue = new ArrayList<>();
-                final ArrayList<Uri> listFalse = new ArrayList<>();
-
-                DialogInterface.OnMultiChoiceClickListener multiChoice = new DialogInterface.OnMultiChoiceClickListener() {
+                final Long[] finalIds = ids;
+                builder.setMultiChoiceItems(names, isChecks, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-//                        ListView lv = ((AlertDialog) dialog).getListView();
-                        Log.v("WHICH", String.valueOf(which));
+
+                        changeRec(finalIds[which], isChecked);
+
                         if (isChecked) {
-                            Log.v("isChecked", String.valueOf(which));
-
-                            mCursor.moveToPosition(which);
-
-                            int id = mCursor.getInt(mCursor.getColumnIndexOrThrow(ClimbersEntry._ID));
-                            Uri currentClimberUri = ContentUris.withAppendedId(ClimbersEntry.CONTENT_URI, id);
-                            listTrue.add(currentClimberUri);
-                            if (listFalse.contains(currentClimberUri))
-                                listFalse.remove(currentClimberUri);
+                            addChoiceToJson(finalIds[which]);
 
                         } else {
-                            Log.v("isNoChecked", String.valueOf(which));
-
-                            mCursor.moveToPosition(which);
-
-                            int id = mCursor.getInt(mCursor.getColumnIndexOrThrow(ClimbersEntry._ID));
-                            Uri currentClimberUri = ContentUris.withAppendedId(ClimbersEntry.CONTENT_URI, id);
-                            listFalse.add(currentClimberUri);
-                            if (listTrue.contains(currentClimberUri))
-                                listTrue.remove(currentClimberUri);
-                        }
-
-//                        int id = mCursor.getInt(mCursor.getColumnIndexOrThrow(ClimbersEntry._ID));
-//                        Uri currentClimberUri = ContentUris.withAppendedId(ClimbersEntry.CONTENT_URI, id);
-//                        int rowsAffected = getContentResolver().update(currentClimberUri, values, null, null);
-                    }
-                };
-
-                builder.setMultiChoiceItems(mCursor, ClimbersEntry.COLUMN_IS_CHECKED, ClimbersEntry.COLUMN_NAME, multiChoice);
-
-                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        ContentValues valuesTrue = new ContentValues();
-                        valuesTrue.put(ClimbersEntry.COLUMN_IS_CHECKED, 1);
-                        ContentValues valuesFalse = new ContentValues();
-                        valuesFalse.put(ClimbersEntry.COLUMN_IS_CHECKED, 0);
-
-                        // Снятие и удаление анчекнутых Climbers
-                        for (int i = 0; i < listFalse.size(); i++) {
-                            getContentResolver().update(listFalse.get(i), valuesFalse, null, null);
-
-                            // Цикл для нахождения индекса элемента в climberArrayList
-                            for (int j = 0; j < climberArrayList.size(); j++) {
-                                Climber climber = climberArrayList.get(j);
-                                if (listFalse.get(i).equals(
-                                        ContentUris.withAppendedId(
-                                                ClimbersEntry.CONTENT_URI,
-                                                climber.getId()))) {
-                                    climberArrayList.remove(j);
+                            // Удаляет кликнутый элемент из climberArrayList и trainingJsonObject
+                            for (int i = 0; i < climberArrayList.size(); i++) {
+                                Climber climber = climberArrayList.get(i);
+                                if (climber.getId() == finalIds[which]) {
+                                    climberArrayList.remove(i);
                                     trainingJsonObject.remove(String.valueOf(climber.getId()));
                                     break;
                                 }
                             }
                         }
-                        // Добавление чекнутых Climbers
-                        for (int i = 0; i < listTrue.size(); i++) {
-                            getContentResolver().update(listTrue.get(i), valuesTrue, null, null);
-                            String token = listTrue.get(i).getLastPathSegment();
-                            addChoiceToJson(Integer.parseInt(token));
-                        }
+                    }
 
+                });
+
+                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
                         trainingAdapter.notifyDataSetChanged();
                     }
                 });
 
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-//                builder.setCursor(cursor1, new DialogInterface.OnMultiChoiceClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-//                        cursor1.moveToPosition(which);
-//                        addChoiceToJson(cursor1.getInt(0));
-//                    }
-
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        Log.v("CHOICE ", String.valueOf(which));
-//                        // Реализовать добовление выбранного скалолаза в trainingJsonObject
-//                        cursor1.moveToPosition(which);
-//                        addChoiceToJson(cursor1.getInt(0));
-////                        AlertDialog.Builder builderInner = new AlertDialog.Builder(TrainingActivity.this);
-////                        builderInner.setTitle("Your selected Item is");
-////                        builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-////                            @Override
-////                            public void onClick(DialogInterface dialog, int which) {
-////
-////                                dialog.dismiss();
-////                            }
-////                        });
-//                    }
-//                }, ClimbersEntry.COLUMN_NAME);
-
-                // create and show the alert dialog
                 AlertDialog dialog = builder.create();
                 dialog.show();
             }
         });
 
         getLoaderManager().initLoader(CLIMBER_LOADER, null, this);
+    }
+
+    //Метод для добовления изменения isChecked в базу данных
+    public void changeRec(long id, boolean isChecked) {
+
+        Uri currentClimberUri = ContentUris.withAppendedId(ClimbersEntry.CONTENT_URI, id);
+
+        ContentValues values = new ContentValues();
+        values.put(ClimbersEntry.COLUMN_IS_CHECKED, (isChecked) ? 1 : 0);
+        getContentResolver().update(currentClimberUri, values, null, null);
     }
 
     @Override
@@ -332,21 +291,19 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
         }
     }
 
-    private void addChoiceToJson(int choice) {
-        Log.v("ID", String.valueOf(choice));
+    private void addChoiceToJson(long climberId) {
+        Log.v("ID", String.valueOf(climberId));
 
         String[] projection = {ClimbersEntry._ID, ClimbersEntry.COLUMN_NAME, ClimbersEntry.COLUMN_TYPE_PAYMENT};
         String selection = ClimbersEntry._ID + "=?";
-        String[] selectionArgs = new String[]{String.valueOf(choice)};
+        String[] selectionArgs = new String[]{String.valueOf(climberId)};
         Cursor cursor = getContentResolver().query(ClimbersEntry.CONTENT_URI, projection, selection, selectionArgs, null);
 
-        int idColumnIndex = cursor.getColumnIndexOrThrow(ClimbersEntry._ID);
         int nameColumnIndex = cursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_NAME);
         int typePaymentColumnIndex = cursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_TYPE_PAYMENT);
 
         if (cursor.moveToFirst()) {
             // достаем данные из курсора
-            final long climberId = cursor.getLong(idColumnIndex);
             final String climberName = cursor.getString(nameColumnIndex);
             final int typePayment = cursor.getInt(typePaymentColumnIndex);
             cursor.close();
@@ -373,15 +330,11 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                         climber.put("payment_to_gran", 100);
                         climber.put("payment_to_me", 0);
                 }
-//                trainingAdapter.setNotifyOnChange(true);
                 trainingJsonObject.put(String.valueOf(climberId), climber);
 
                 // Добавляет новый элемент trainingJsonObject в climberArrayList
                 addClimberToArrayList(trainingJsonObject.names().length() - 1);
                 Log.v("climberArrayList in -1", climberArrayList.get(climberArrayList.size() - 1).toString());
-
-                // Обновляет список в TrainingActivity
-                trainingAdapter.notifyDataSetChanged();
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -540,6 +493,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         mCursor = cursor;
+        Log.v("CURSOR", cursor.toString());
     }
 
     @Override
