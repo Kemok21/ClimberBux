@@ -35,6 +35,7 @@ public class OnDateCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder holder = (ViewHolder) view.getTag();
+
         // Find the columns of payments attributes that we're interested in
         int dateColumnIndex = cursor.getColumnIndexOrThrow(ClimbersContract.PaymentsEntry.COLUMN_DATE);
         int climberNameColumnIndex = cursor.getColumnIndexOrThrow(ClimbersContract.PaymentsEntry.COLUMN_CLIMBER_NAME);

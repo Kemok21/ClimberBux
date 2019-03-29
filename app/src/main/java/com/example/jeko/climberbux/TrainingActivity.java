@@ -278,7 +278,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
         try {
             String keyId = trainingJsonObject.names().getString(i);
             JSONObject climberJson = trainingJsonObject.getJSONObject(keyId);
-            Climber climber = new Climber(
+            Climber climber = new Climber(this,
                     climberJson.getInt("id"),
                     climberJson.getString("name"),
                     climberJson.getInt("type_payment"),
