@@ -261,7 +261,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_end_of_training:
-                endOfTraining();
+                showEndOfTrainingConfirmationDialog();
                 return true;
             case R.id.action_date_of_training:
                 dateOfTraining();
@@ -271,6 +271,24 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showEndOfTrainingConfirmationDialog() {
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the positive and negative buttons on the dialog.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.end_of_training_dialog_massage);
+        builder.setPositiveButton(R.string.end_of_training, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // User clicked the "Delete" button, so delete the book.
+                endOfTraining();
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     // Добавляет Climber в climberArrayList из trainingJsonArray по индексу
@@ -283,7 +301,9 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                     climberJson.getString("name"),
                     climberJson.getInt("type_payment"),
                     climberJson.getInt("payment_to_gran"),
-                    climberJson.getInt("payment_to_me")
+                    climberJson.getInt("payment_to_me"),
+                    climberJson.getInt("visits"),
+                    climberJson.getInt("payed")
             );
             climberArrayList.add(i, climber);
         } catch (JSONException e) {
@@ -294,18 +314,34 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
     private void addChoiceToJson(long climberId) {
         Log.v("ID", String.valueOf(climberId));
 
-        String[] projection = {ClimbersEntry._ID, ClimbersEntry.COLUMN_NAME, ClimbersEntry.COLUMN_TYPE_PAYMENT};
+        String[] projection = {
+                ClimbersEntry._ID,
+                ClimbersEntry.COLUMN_NAME,
+                ClimbersEntry.COLUMN_TYPE_PAYMENT,
+                ClimbersEntry.COLUMN_VISITS,
+                ClimbersEntry.COLUMN_PAYED};
+
         String selection = ClimbersEntry._ID + "=?";
         String[] selectionArgs = new String[]{String.valueOf(climberId)};
-        Cursor cursor = getContentResolver().query(ClimbersEntry.CONTENT_URI, projection, selection, selectionArgs, null);
+
+        Cursor cursor = getContentResolver().query(
+                ClimbersEntry.CONTENT_URI,
+                projection,
+                selection,
+                selectionArgs,
+                null);
 
         int nameColumnIndex = cursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_NAME);
         int typePaymentColumnIndex = cursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_TYPE_PAYMENT);
+        int visitsColumnIndex = cursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_VISITS);
+        int payedColumnIndex = cursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_PAYED);
 
         if (cursor.moveToFirst()) {
             // достаем данные из курсора
             final String climberName = cursor.getString(nameColumnIndex);
             final int typePayment = cursor.getInt(typePaymentColumnIndex);
+            final int visits = cursor.getInt(visitsColumnIndex);
+            final int payed = cursor.getInt(payedColumnIndex);
             cursor.close();
 
             try {
@@ -313,6 +349,8 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                 climber.put("id", climberId);
                 climber.put("name", climberName);
                 climber.put("type_payment", typePayment);
+                climber.put("visits", visits);
+                climber.put("payed", payed);
                 switch (typePayment) {
                     case ClimbersEntry.TYPE_PAYMENT_SINGLE:
                         climber.put("payment_to_gran", 100);
@@ -392,6 +430,8 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
             String climberName = climber.getName();
             int payedGran = Integer.parseInt(climber.getPaymentGran());
             int payedMe = Integer.parseInt(climber.getPaymentMe());
+            int visits = climber.getVisits();
+            int payed = climber.getPayed();
 
             // Добавление в Payments
             ContentValues paymentValues = new ContentValues();
@@ -402,10 +442,12 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
             paymentValues.put(PaymentsEntry.COLUMN_PAYED_TO_ME, payedMe);
             Uri newUri = getContentResolver().insert(PaymentsEntry.CONTENT_URI, paymentValues);
 
-            // Изменить Climber isChecked
+            // Изменить Climber isChecked, visits and payed
             Uri currentClimberUri = ContentUris.withAppendedId(ClimbersEntry.CONTENT_URI, climberId);
             ContentValues climberValues = new ContentValues();
             climberValues.put(ClimbersEntry.COLUMN_IS_CHECKED, 0);
+            climberValues.put(ClimbersEntry.COLUMN_VISITS, visits + 1);
+            climberValues.put(ClimbersEntry.COLUMN_PAYED, payed + payedGran + payedMe);
             int updated = getContentResolver().update(currentClimberUri, climberValues, null, null);
 
             trainingJsonObject.remove(String.valueOf(climberId));
@@ -480,13 +522,16 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
         String[] projection = new String[]{
                 ClimbersEntry._ID,
                 ClimbersEntry.COLUMN_NAME,
-                ClimbersEntry.COLUMN_IS_CHECKED
+                ClimbersEntry.COLUMN_IS_CHECKED,
+                ClimbersEntry.COLUMN_PAYED,
+                ClimbersEntry.COLUMN_VISITS
         };
         return new CursorLoader(
                 this,
                 ClimbersEntry.CONTENT_URI,
                 projection,
-                null, null, null
+                null, null,
+                ClimbersEntry.COLUMN_PAYED + " DESC"
         );
     }
 

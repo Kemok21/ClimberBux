@@ -10,15 +10,19 @@ public class Climber {
     private int mTypePayment;
     private int mPaymentGran;
     private int mPaymentMe;
+    private int mVisits;
+    private int mPayed;
     private Context mContext;
 
-    public Climber(Context context, long id, String name, int typePayment, int paymentGran, int paymentMe) {
+    public Climber(Context context, long id, String name, int typePayment, int paymentGran, int paymentMe, int visits, int payed) {
         mContext = context;
         mId = id;
         mName = name;
         mTypePayment = typePayment;
         mPaymentGran = paymentGran;
         mPaymentMe = paymentMe;
+        mVisits = visits;
+        mPayed = payed;
     }
 
     public long getId() {
@@ -48,6 +52,14 @@ public class Climber {
 
     public String getPaymentMe() {
         return String.valueOf(mPaymentMe);
+    }
+
+    public int getVisits() {
+        return mVisits;
+    }
+
+    public int getPayed() {
+        return mPayed;
     }
 
     public void setPaymentGran(int paymentGran) {

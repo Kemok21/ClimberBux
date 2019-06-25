@@ -168,7 +168,7 @@ public class EditorTrainingActivity extends AppCompatActivity implements LoaderM
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_date_of_training:
-                dateOfTraining();///////EDIT!!!!!//////
+                dateOfTraining();
                 return true;
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(EditorTrainingActivity.this);
@@ -181,21 +181,39 @@ public class EditorTrainingActivity extends AppCompatActivity implements LoaderM
     private void addClimberToArrayList(Cursor cursor) {
         while (cursor.moveToNext()) {
             int paymentIdColumnIndex = cursor.getColumnIndexOrThrow(PaymentsEntry._ID);
+            int climberIdColumnIndex = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_CLIMBER_ID);
             int climberNameColumnIndex = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_CLIMBER_NAME);
             int payedToGranColumnIndex = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_PAYED_TO_GRAN);
             int payedToMeColumnIndex = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_PAYED_TO_ME);
 
             long paymentId = cursor.getLong(paymentIdColumnIndex);
+            long climberId = cursor.getLong(climberIdColumnIndex);
             String climberName = cursor.getString(climberNameColumnIndex);
             int payedToGran = cursor.getInt(payedToGranColumnIndex);
             int payedToMe = cursor.getInt(payedToMeColumnIndex);
 
+            Uri climberUri = ContentUris.withAppendedId(ClimbersEntry.CONTENT_URI, climberId);
+            String[] projection = new String[]{
+                    ClimbersEntry._ID,
+                    ClimbersEntry.COLUMN_TYPE_PAYMENT,
+                    ClimbersEntry.COLUMN_PAYED,
+                    ClimbersEntry.COLUMN_VISITS};
+            Cursor climberCursor = getContentResolver().query(climberUri, projection, null, null, null);
+
+            climberCursor.moveToFirst();
+            int visits = climberCursor.getInt(climberCursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_VISITS));
+            int payed = climberCursor.getInt(climberCursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_PAYED));
+            int typePayment = climberCursor.getInt(climberCursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_TYPE_PAYMENT));
+
+
             Climber climber = new Climber(this,
                     paymentId,
                     climberName,
-                    0,
+                    typePayment,
                     payedToGran,
-                    payedToMe
+                    payedToMe,
+                    visits,
+                    payed
             );
             climberArrayList.add(climber);
         }
