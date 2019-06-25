@@ -70,9 +70,9 @@ public class OnDateCursorAdapter extends CursorAdapter {
     static class ViewHolder {
         @BindView(R.id.date_text_view)
         TextView trainingDate;
-        @BindView(R.id.name_of_climber)
+        @BindView(R.id.income_text_view)
         TextView nameOfClimber;
-        @BindView(R.id.payed_text_view)
+        @BindView(R.id.climbers_text_view)
         TextView payedFromClimber;
 
 //        @BindView(R.id.total_relative_layout)

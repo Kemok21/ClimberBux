@@ -5,14 +5,14 @@ import com.example.jeko.climberbux.data.ClimbersContract.ClimbersEntry;
 
 public class Climber {
 
-    private int mId;
+    private long mId;
     private String mName;
     private int mTypePayment;
     private int mPaymentGran;
     private int mPaymentMe;
     private Context mContext;
 
-    public Climber(Context context, int id, String name, int typePayment, int paymentGran, int paymentMe) {
+    public Climber(Context context, long id, String name, int typePayment, int paymentGran, int paymentMe) {
         mContext = context;
         mId = id;
         mName = name;
@@ -21,7 +21,7 @@ public class Climber {
         mPaymentMe = paymentMe;
     }
 
-    public int getId() {
+    public long getId() {
         return mId;
     }
 
@@ -48,6 +48,14 @@ public class Climber {
 
     public String getPaymentMe() {
         return String.valueOf(mPaymentMe);
+    }
+
+    public void setPaymentGran(int paymentGran) {
+        mPaymentGran = paymentGran;
+    }
+
+    public void setPaymentMe(int paymentMe) {
+        mPaymentMe = paymentMe;
     }
 
     @Override

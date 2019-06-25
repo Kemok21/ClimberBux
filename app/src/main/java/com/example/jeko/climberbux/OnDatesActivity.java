@@ -1,15 +1,29 @@
 package com.example.jeko.climberbux;
 
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.jeko.climberbux.data.ClimbersContract.PaymentsEntry;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,7 +32,8 @@ import butterknife.ButterKnife;
 public class OnDatesActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int PAYMENT_LOADER = 0;
-    CursorAdapter mCursorAdapter;
+    private DateAdapter dateAdapter;
+    private ArrayList<Date> dateArrayList = new ArrayList<>();
 
     @BindView(R.id.list_view_on_dates)
     ListView onDateListView;
@@ -29,30 +44,28 @@ public class OnDatesActivity extends AppCompatActivity implements LoaderManager.
         setContentView(R.layout.activity_on_dates);
         ButterKnife.bind(this);
 
-        mCursorAdapter = new OnDateCursorAdapter(this, null);
-        onDateListView.setAdapter(mCursorAdapter);
-
         getLoaderManager().initLoader(PAYMENT_LOADER, null, this);
 
-//        String onDates = "";
-//        Cursor cursor = getContentResolver().query(
-//                PaymentsEntry.CONTENT_URI,
-//                null,
-//                null,
-//                null,
-//                null);
-//        while (cursor.moveToNext()) {
-//            int idIndex = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_CLIMBER_ID);
-//            int dateIndex = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_DATE);
-//            int payedIndex = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_PAYED);
-//            long id = cursor.getLong(idIndex);
-//            String date = cursor.getString(dateIndex);
-//            int payed = cursor.getInt(payedIndex);
-//
-//            onDates += String.valueOf(id)+";"+String.valueOf(date)+";"+String.valueOf(payed)+"\n";
-//        }
-//        TextView textView = findViewById(R.id.dates_text_view);
-//        textView.setText(onDates);
+        dateAdapter = new DateAdapter(this, dateArrayList);
+        onDateListView.setAdapter(dateAdapter);
+
+        onDateListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Date currentDate = (Date) onDateListView.getAdapter().getItem(position);
+                ArrayList<Long> idList = currentDate.getPaymentIdList();
+                Long[] idArray = new Long[idList.size()];
+
+                Intent intent = new Intent(OnDatesActivity.this, EditorTrainingActivity.class);
+
+                Uri currentPayment = ContentUris.withAppendedId(PaymentsEntry.CONTENT_URI, idList.get(0));
+                // Set the URI on the data field of the intent
+                intent.setData(currentPayment);
+
+                startActivity(intent);
+                }
+        });
     }
 
     @Override
@@ -76,12 +89,59 @@ public class OnDatesActivity extends AppCompatActivity implements LoaderManager.
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mCursorAdapter.swapCursor(data);
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        dateArrayList.removeAll(dateArrayList);
+        ArrayList<String> dates = new ArrayList<>();
+        // Заполняем dates
+        while(cursor.moveToNext()) {
+            String date = cursor.getString(cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_DATE));
+            if(!dates.contains(date)) dates.add(date);
+        }
+        // Цикл для заполнения dateArrayList
+        for(String date : dates) {
+
+            String[] projection = new String[]{
+                    PaymentsEntry._ID,
+                    PaymentsEntry.COLUMN_DATE,
+                    PaymentsEntry.COLUMN_PAYED_TO_GRAN,
+                    PaymentsEntry.COLUMN_PAYED_TO_ME
+            };
+            String selection = PaymentsEntry.COLUMN_DATE + " = ?";
+            String[] selectionArgs = {date};
+
+            Cursor cursorByDate = getContentResolver().query(
+                    PaymentsEntry.CONTENT_URI,
+                    projection,
+                    selection,
+                    selectionArgs,
+                    null);
+
+            int countClimbers = 0;
+            int trainingIncome = 0;
+            ArrayList<Long> paymentIdList = new ArrayList<>();
+
+            while(cursorByDate.moveToNext()) {
+
+                int idColumnIndex = cursorByDate.getColumnIndexOrThrow(PaymentsEntry._ID);
+                int payedToGranColumnIndex = cursorByDate.getColumnIndexOrThrow(PaymentsEntry.COLUMN_PAYED_TO_GRAN);
+                int payedToMeColumnIndex = cursorByDate.getColumnIndexOrThrow(PaymentsEntry.COLUMN_PAYED_TO_ME);
+
+                long id = cursorByDate.getLong(idColumnIndex);
+                int payed = cursorByDate.getInt(payedToGranColumnIndex) + cursorByDate.getInt(payedToMeColumnIndex);
+
+                countClimbers++;
+                trainingIncome += payed;
+                paymentIdList.add(id);
+            }
+
+            dateArrayList.add(new Date(date, countClimbers, trainingIncome, paymentIdList));
+        }
+        dateAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mCursorAdapter.swapCursor(null);
+        dateArrayList.removeAll(dateArrayList);
+        dateAdapter.notifyDataSetChanged();
     }
 }

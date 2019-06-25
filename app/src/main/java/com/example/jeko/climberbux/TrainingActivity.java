@@ -149,11 +149,11 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                     @TargetApi(Build.VERSION_CODES.KITKAT)
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String keyId = String.valueOf(climberArrayList.get(position).getId());
-                        trainingJsonObject.remove(keyId);
+                        long keyId = climberArrayList.get(position).getId();
+                        trainingJsonObject.remove(String.valueOf(keyId));
                         climberArrayList.remove(position);
 
-                        Uri currentClimberUri = ContentUris.withAppendedId(ClimbersEntry.CONTENT_URI, Integer.parseInt(keyId));
+                        Uri currentClimberUri = ContentUris.withAppendedId(ClimbersEntry.CONTENT_URI, keyId);
                         ContentValues valuesFalse = new ContentValues();
                         valuesFalse.put(ClimbersEntry.COLUMN_IS_CHECKED, 0);
                         getContentResolver().update(currentClimberUri, valuesFalse, null, null);
@@ -388,7 +388,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
         int count = climberArrayList.size();
         for (int i = count - 1; i >= 0; i--) {
             Climber climber = climberArrayList.get(i);
-            int climberId = climber.getId();
+            long climberId = climber.getId();
             String climberName = climber.getName();
             int payedGran = Integer.parseInt(climber.getPaymentGran());
             int payedMe = Integer.parseInt(climber.getPaymentMe());

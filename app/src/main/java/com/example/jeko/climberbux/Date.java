@@ -8,6 +8,7 @@ public class Date {
     private int mCountClimber;
     private int mTrainingIncome;
     private ArrayList<Long> mPaymentIdList;
+    private boolean isVisibilityFlag = false;
 
     public Date(String trainingDate, int countClimber, int trainingIncome, ArrayList<Long> paymentIdList) {
         mTrainingDate = trainingDate;
@@ -20,15 +21,23 @@ public class Date {
         return mTrainingDate;
     }
 
-    public int getCountClimber() {
-        return mCountClimber;
+    public String getCountClimber() {
+        return String.valueOf(mCountClimber);
     }
 
-    public int getTrainingIncome() {
-        return mTrainingIncome;
+    public String getTrainingIncome() {
+        return String.valueOf(mTrainingIncome);
     }
 
     public ArrayList<Long> getPaymentIdList() {
         return mPaymentIdList;
+    }
+
+    public boolean isVisibilityFlag() {
+        return isVisibilityFlag;
+    }
+
+    public void setVisibilityFlag(boolean visibilityFlag) {
+        isVisibilityFlag = visibilityFlag;
     }
 }
