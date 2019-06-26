@@ -10,7 +10,7 @@ import com.example.jeko.climberbux.data.ClimbersContract.PaymentsEntry;
 
 public class ClimbersDbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "accounting.db";
     private static final String DATABASE_ALTER_TABLE_1 = "ALTER TABLE "
             + ClimbersEntry.TABLE_NAME + " ADD COLUMN " + ClimbersEntry.COLUMN_IS_CHECKED + " INTEGER NOT NULL DEFAULT 0;";
@@ -23,7 +23,7 @@ public class ClimbersDbHelper extends SQLiteOpenHelper {
                     ClimbersEntry.COLUMN_RANK + " INTEGER NOT NULL DEFAULT 0," +
                     ClimbersEntry.COLUMN_TYPE_PAYMENT + " INTEGER NOT NULL DEFAULT 0," +
                     ClimbersEntry.COLUMN_PAYED + " INTEGER NOT NULL DEFAULT 0," +
-                    ClimbersEntry.COLUMN_VISITS + " INTEGER NOT NULL DEFAULT 0," +
+                    ClimbersEntry.COLUMN_VISITS + " TEXT," +
                     ClimbersEntry.COLUMN_PHOTO + " TEXT," +
                     ClimbersEntry.COLUMN_IS_CHECKED + " INTEGER NOT NULL DEFAULT 0);";
 

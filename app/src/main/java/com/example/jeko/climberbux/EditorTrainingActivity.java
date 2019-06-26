@@ -85,6 +85,7 @@ public class EditorTrainingActivity extends AppCompatActivity implements LoaderM
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                final Climber climber = climberArrayList.get(position);
                 AlertDialog.Builder builder = new AlertDialog.Builder(EditorTrainingActivity.this);
                 builder.setTitle("Edit field");
                 builder.setMessage("Save new payment or Remove a climber from the training?");
@@ -101,7 +102,7 @@ public class EditorTrainingActivity extends AppCompatActivity implements LoaderM
                 inputGran.setHint("Payment to Gran");
                 inputGran.setInputType(InputType.TYPE_CLASS_NUMBER);
                 inputGran.setLayoutParams(lp);
-                String toGran = climberArrayList.get(position).getPaymentGran();
+                String toGran = climber.getPaymentGran();
                 if (toGran.equals("0")) {
                     inputGran.setText("");
                 } else inputGran.setText(toGran);
@@ -112,7 +113,7 @@ public class EditorTrainingActivity extends AppCompatActivity implements LoaderM
                 inputMe.setHint("Payment to Me");
                 inputMe.setInputType(InputType.TYPE_CLASS_NUMBER);
                 inputMe.setLayoutParams(lp);
-                String toMe = climberArrayList.get(position).getPaymentMe();
+                String toMe = climber.getPaymentMe();
                 if (toMe.equals("0")) {
                     inputMe.setText("");
                 } else inputMe.setText(toMe);
@@ -123,20 +124,28 @@ public class EditorTrainingActivity extends AppCompatActivity implements LoaderM
                 builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        long keyId = climberArrayList.get(position).getId();
-                        Log.v("abrakadabra", String.valueOf(keyId));
+                        long keyId = climber.getId();
+//                        Log.v("abrakadabra", String.valueOf(keyId));
                         String paymentToGran = inputGran.getText().toString();
                         if (paymentToGran.equals("")) paymentToGran = "0";
                         String paymentToMe = inputMe.getText().toString();
                         if (paymentToMe.equals("")) paymentToMe = "0";
-                        Log.v("kadabraabra", paymentToGran);
+//                        Log.v("kadabraabra", paymentToGran);
 
                         Uri currentPaymentUri = ContentUris.withAppendedId(PaymentsEntry.CONTENT_URI, keyId);
                         ContentValues paymentValues = new ContentValues();
                         paymentValues.put(PaymentsEntry.COLUMN_PAYED_TO_GRAN, Integer.valueOf(paymentToGran));
                         paymentValues.put(PaymentsEntry.COLUMN_PAYED_TO_ME, Integer.valueOf(paymentToMe));
-                        int up = getContentResolver().update(currentPaymentUri, paymentValues, null, null);
-                        Log.v("Update", String.valueOf(up));
+                        int updatePayment = getContentResolver().update(currentPaymentUri, paymentValues, null, null);
+//                        Log.v("Update", String.valueOf(up));
+
+                        int payment = Integer.parseInt(climber.getPaymentGran()) + Integer.parseInt(climber.getPaymentMe());
+                        int inequality = Integer.parseInt(paymentToGran) + Integer.parseInt(paymentToMe) - payment;
+
+                        Uri climberUri = ContentUris.withAppendedId(ClimbersEntry.CONTENT_URI, climber.getId());
+                        ContentValues climberValues = new ContentValues();
+                        climberValues.put(ClimbersEntry.COLUMN_PAYED, climber.getPayed() + inequality);
+                        int updateClimber = getContentResolver().update(climberUri, climberValues, null, null);
 
                     }
                 });
@@ -145,7 +154,7 @@ public class EditorTrainingActivity extends AppCompatActivity implements LoaderM
                     @TargetApi(Build.VERSION_CODES.KITKAT)
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        long keyId = climberArrayList.get(position).getId();
+                        long keyId = climber.getId();
 
                         Uri currentPaymentUri = ContentUris.withAppendedId(PaymentsEntry.CONTENT_URI, keyId);
                         getContentResolver().delete(currentPaymentUri, null, null);
@@ -180,39 +189,43 @@ public class EditorTrainingActivity extends AppCompatActivity implements LoaderM
     // Добавляет Climbers в climberArrayList из mCursor
     private void addClimberToArrayList(Cursor cursor) {
         while (cursor.moveToNext()) {
-            int paymentIdColumnIndex = cursor.getColumnIndexOrThrow(PaymentsEntry._ID);
+//            int paymentIdColumnIndex = cursor.getColumnIndexOrThrow(PaymentsEntry._ID);
             int climberIdColumnIndex = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_CLIMBER_ID);
             int climberNameColumnIndex = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_CLIMBER_NAME);
             int payedToGranColumnIndex = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_PAYED_TO_GRAN);
             int payedToMeColumnIndex = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_PAYED_TO_ME);
 
-            long paymentId = cursor.getLong(paymentIdColumnIndex);
+//            long paymentId = cursor.getLong(paymentIdColumnIndex);
             long climberId = cursor.getLong(climberIdColumnIndex);
             String climberName = cursor.getString(climberNameColumnIndex);
             int payedToGran = cursor.getInt(payedToGranColumnIndex);
             int payedToMe = cursor.getInt(payedToMeColumnIndex);
 
-            Uri climberUri = ContentUris.withAppendedId(ClimbersEntry.CONTENT_URI, climberId);
+//            Uri climberUri = ContentUris.withAppendedId(ClimbersEntry.CONTENT_URI, climberId);
             String[] projection = new String[]{
                     ClimbersEntry._ID,
                     ClimbersEntry.COLUMN_TYPE_PAYMENT,
                     ClimbersEntry.COLUMN_PAYED,
-                    ClimbersEntry.COLUMN_VISITS};
-            Cursor climberCursor = getContentResolver().query(climberUri, projection, null, null, null);
+//                    ClimbersEntry.COLUMN_VISITS
+            };
+            String selection = ClimbersEntry._ID + " = ?";
+            String[] selectionArgs = {String.valueOf(climberId)};
+
+            Cursor climberCursor = getContentResolver().query(ClimbersEntry.CONTENT_URI, projection, selection, selectionArgs, null);
 
             climberCursor.moveToFirst();
-            int visits = climberCursor.getInt(climberCursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_VISITS));
+//            String visits = climberCursor.getString(climberCursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_VISITS));
             int payed = climberCursor.getInt(climberCursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_PAYED));
             int typePayment = climberCursor.getInt(climberCursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_TYPE_PAYMENT));
 
 
             Climber climber = new Climber(this,
-                    paymentId,
+                    climberId,
                     climberName,
                     typePayment,
                     payedToGran,
                     payedToMe,
-                    visits,
+//                    Integer.valueOf(visits),
                     payed
             );
             climberArrayList.add(climber);

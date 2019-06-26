@@ -302,10 +302,11 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                     climberJson.getInt("type_payment"),
                     climberJson.getInt("payment_to_gran"),
                     climberJson.getInt("payment_to_me"),
-                    climberJson.getInt("visits"),
+//                    Integer.valueOf(climberJson.getString("visits")),
                     climberJson.getInt("payed")
             );
             climberArrayList.add(i, climber);
+            Log.v("CLIMBERARRAYLIST", climberArrayList.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -318,7 +319,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                 ClimbersEntry._ID,
                 ClimbersEntry.COLUMN_NAME,
                 ClimbersEntry.COLUMN_TYPE_PAYMENT,
-                ClimbersEntry.COLUMN_VISITS,
+//                ClimbersEntry.COLUMN_VISITS,
                 ClimbersEntry.COLUMN_PAYED};
 
         String selection = ClimbersEntry._ID + "=?";
@@ -333,14 +334,14 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
 
         int nameColumnIndex = cursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_NAME);
         int typePaymentColumnIndex = cursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_TYPE_PAYMENT);
-        int visitsColumnIndex = cursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_VISITS);
+//        int visitsColumnIndex = cursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_VISITS);
         int payedColumnIndex = cursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_PAYED);
 
         if (cursor.moveToFirst()) {
             // достаем данные из курсора
             final String climberName = cursor.getString(nameColumnIndex);
             final int typePayment = cursor.getInt(typePaymentColumnIndex);
-            final int visits = cursor.getInt(visitsColumnIndex);
+//            final String visits = cursor.getString(visitsColumnIndex);
             final int payed = cursor.getInt(payedColumnIndex);
             cursor.close();
 
@@ -349,7 +350,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                 climber.put("id", climberId);
                 climber.put("name", climberName);
                 climber.put("type_payment", typePayment);
-                climber.put("visits", visits);
+//                climber.put("visits", visits);
                 climber.put("payed", payed);
                 switch (typePayment) {
                     case ClimbersEntry.TYPE_PAYMENT_SINGLE:
@@ -372,7 +373,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
 
                 // Добавляет новый элемент trainingJsonObject в climberArrayList
                 addClimberToArrayList(trainingJsonObject.names().length() - 1);
-                Log.v("climberArrayList in -1", climberArrayList.get(climberArrayList.size() - 1).toString());
+//                Log.v("climberArrayList in -1", climberArrayList.get(climberArrayList.size() - 1).toString());
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -430,7 +431,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
             String climberName = climber.getName();
             int payedGran = Integer.parseInt(climber.getPaymentGran());
             int payedMe = Integer.parseInt(climber.getPaymentMe());
-            int visits = climber.getVisits();
+//            int visits = climber.getVisits();
             int payed = climber.getPayed();
 
             // Добавление в Payments
@@ -446,7 +447,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
             Uri currentClimberUri = ContentUris.withAppendedId(ClimbersEntry.CONTENT_URI, climberId);
             ContentValues climberValues = new ContentValues();
             climberValues.put(ClimbersEntry.COLUMN_IS_CHECKED, 0);
-            climberValues.put(ClimbersEntry.COLUMN_VISITS, visits + 1);
+//            climberValues.put(ClimbersEntry.COLUMN_VISITS, String.valueOf(visits + 1));
             climberValues.put(ClimbersEntry.COLUMN_PAYED, payed + payedGran + payedMe);
             int updated = getContentResolver().update(currentClimberUri, climberValues, null, null);
 
@@ -524,7 +525,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                 ClimbersEntry.COLUMN_NAME,
                 ClimbersEntry.COLUMN_IS_CHECKED,
                 ClimbersEntry.COLUMN_PAYED,
-                ClimbersEntry.COLUMN_VISITS
+//                ClimbersEntry.COLUMN_VISITS
         };
         return new CursorLoader(
                 this,
