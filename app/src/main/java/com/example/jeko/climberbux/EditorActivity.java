@@ -13,16 +13,21 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jeko.climberbux.data.ClimbersContract.ClimbersEntry;
+import com.example.jeko.climberbux.data.ClimbersContract.PaymentsEntry;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,6 +50,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     @BindView(R.id.edit_age)
     EditText mAgeEditText;
+
+    @BindView(R.id.list_view_on_dates)
+    ListView mDatesListView;
+
+    @BindView(R.id.payments_text_view)
+    TextView mPaymentTextView;
+
+    OnDateCursorAdapter mOnDateCursorAdapter;
 
     private Uri mCurrentClimberUri;
 
@@ -143,13 +156,43 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         // Check get data of intent
         if (mCurrentClimberUri == null) {
             setTitle(getString(R.string.add_a_climber_title));
+            mPaymentTextView.setVisibility(View.GONE);
             // Invalidate the options menu, so the "Delete" menu option can be hidden.
             // (It doesn't make sense to delete a book that hasn't been created yet.)
             invalidateOptionsMenu();
         } else {
             setTitle(getString(R.string.edit_climber_title));
             getSupportLoaderManager().initLoader(CLIMBER_LOADER, null, this);
+
+            mOnDateCursorAdapter = new OnDateCursorAdapter(this, null);
+
+            mOnDateCursorAdapter.swapCursor(getPaymentCursorByClimber(mCurrentClimberUri));
+
+            mDatesListView.setAdapter(mOnDateCursorAdapter);
+
         }
+    }
+
+    private Cursor getPaymentCursorByClimber(Uri climberUri) {
+        String climberId = climberUri.getLastPathSegment();
+
+        String[] projection = new String[]{
+                PaymentsEntry._ID,
+                PaymentsEntry.COLUMN_CLIMBER_ID,
+                PaymentsEntry.COLUMN_CLIMBER_NAME,
+                PaymentsEntry.COLUMN_DATE,
+                PaymentsEntry.COLUMN_PAYED_TO_GRAN,
+                PaymentsEntry.COLUMN_PAYED_TO_ME};
+
+        String selection = PaymentsEntry.COLUMN_CLIMBER_ID + " = ?";
+        String[] selectionArgs = {climberId};
+
+        return getContentResolver().query(
+                PaymentsEntry.CONTENT_URI,
+                projection,
+                selection,
+                selectionArgs,
+                null);
     }
 
     @Override
@@ -190,38 +233,61 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         if (TextUtils.isEmpty(nameString)) return;
         String ageString = mAgeEditText.getText().toString();
 
-        ContentValues values = new ContentValues();
+        ContentValues climberValues = new ContentValues();
 
         int age = 0;
-        values.put(ClimbersEntry.COLUMN_NAME, nameString);
+        climberValues.put(ClimbersEntry.COLUMN_NAME, nameString);
         if (!TextUtils.isEmpty(ageString)) {
             age = Integer.parseInt(ageString);
         }
 
-        values.put(ClimbersEntry.COLUMN_AGE, age);
-        values.put(ClimbersEntry.COLUMN_GENDER, mGender);
-        values.put(ClimbersEntry.COLUMN_RANK, mRank);
-        values.put(ClimbersEntry.COLUMN_TYPE_PAYMENT, mPayment);
+        climberValues.put(ClimbersEntry.COLUMN_AGE, age);
+        climberValues.put(ClimbersEntry.COLUMN_GENDER, mGender);
+        climberValues.put(ClimbersEntry.COLUMN_RANK, mRank);
+        climberValues.put(ClimbersEntry.COLUMN_TYPE_PAYMENT, mPayment);
 
         if (mCurrentClimberUri == null) {
             // Insert a new climber into the provider, returning the content URI for the new climber.
             // Insert a new row for climber in the database, returning the ID of that new row.
-            Uri newUri = getContentResolver().insert(ClimbersEntry.CONTENT_URI, values);
+            Uri newUri = getContentResolver().insert(ClimbersEntry.CONTENT_URI, climberValues);
             if (newUri == null) {
                 Toast.makeText(this, getString(R.string.error_saving_climber_toast), Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, getString(R.string.saved_climber_toast), Toast.LENGTH_SHORT).show();
             }
         } else {
-            int rowsAffected = getContentResolver().update(mCurrentClimberUri, values, null, null);
+            int rowsAffected = getContentResolver().update(mCurrentClimberUri, climberValues, null, null);
             if (rowsAffected == 0) {
                 Toast.makeText(this, getString(R.string.error_updating_climber_toast), Toast.LENGTH_SHORT).show();
             } else {
+                updateClimberNameInPaymentsDB(mCurrentClimberUri.getLastPathSegment() ,nameString);
                 Toast.makeText(this, getString(R.string.updated_climber_toast), Toast.LENGTH_SHORT).show();
             }
         }
         // Close the Activity
         finish();
+    }
+
+    private void updateClimberNameInPaymentsDB(String climberId, String name) {
+        String[] projection = new String[]{
+                PaymentsEntry._ID,
+                PaymentsEntry.COLUMN_CLIMBER_ID,
+                PaymentsEntry.COLUMN_CLIMBER_NAME,
+                PaymentsEntry.COLUMN_DATE,
+                PaymentsEntry.COLUMN_PAYED_TO_GRAN,
+                PaymentsEntry.COLUMN_PAYED_TO_ME};
+
+        String selection = PaymentsEntry.COLUMN_CLIMBER_ID + " = ?";
+        String[] selectionArgs = {climberId};
+
+        ContentValues paymentValues = new ContentValues();
+        paymentValues.put(PaymentsEntry.COLUMN_CLIMBER_NAME, name);
+
+        getContentResolver().update(
+                PaymentsEntry.CONTENT_URI,
+                paymentValues,
+                selection,
+                selectionArgs);
     }
 
     private void deleteClimber() {
@@ -264,7 +330,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 ClimbersEntry.COLUMN_AGE,
                 ClimbersEntry.COLUMN_RANK,
                 ClimbersEntry.COLUMN_TYPE_PAYMENT,
-                ClimbersEntry.COLUMN_VISITS,
                 ClimbersEntry.COLUMN_PAYED,
                 ClimbersEntry.COLUMN_PHOTO
         };
