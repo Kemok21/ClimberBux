@@ -8,10 +8,12 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
@@ -315,11 +317,15 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
     private void addChoiceToJson(long climberId) {
         Log.v("ID", String.valueOf(climberId));
 
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        int singleCost = Integer.parseInt(sharedPrefs.getString(getString(R.string.settings_single_cost_key), "200"))/2;
+        int subscriptionCost = Integer.parseInt(sharedPrefs.getString(getString(R.string.settings_subscription_cost_key), "1600"))/2;
+        int certificateCost = Integer.parseInt(sharedPrefs.getString(getString(R.string.settings_single_cost_key), "200"))/-2;
+
         String[] projection = {
                 ClimbersEntry._ID,
                 ClimbersEntry.COLUMN_NAME,
                 ClimbersEntry.COLUMN_TYPE_PAYMENT,
-//                ClimbersEntry.COLUMN_VISITS,
                 ClimbersEntry.COLUMN_PAYED};
 
         String selection = ClimbersEntry._ID + "=?";
@@ -334,14 +340,12 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
 
         int nameColumnIndex = cursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_NAME);
         int typePaymentColumnIndex = cursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_TYPE_PAYMENT);
-//        int visitsColumnIndex = cursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_VISITS);
         int payedColumnIndex = cursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_PAYED);
 
         if (cursor.moveToFirst()) {
             // достаем данные из курсора
             final String climberName = cursor.getString(nameColumnIndex);
             final int typePayment = cursor.getInt(typePaymentColumnIndex);
-//            final String visits = cursor.getString(visitsColumnIndex);
             final int payed = cursor.getInt(payedColumnIndex);
             cursor.close();
 
@@ -350,30 +354,28 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                 climber.put("id", climberId);
                 climber.put("name", climberName);
                 climber.put("type_payment", typePayment);
-//                climber.put("visits", visits);
                 climber.put("payed", payed);
                 switch (typePayment) {
                     case ClimbersEntry.TYPE_PAYMENT_SINGLE:
-                        climber.put("payment_to_gran", 100);
-                        climber.put("payment_to_me", 100);
+                        climber.put("payment_to_gran", singleCost);
+                        climber.put("payment_to_me", singleCost);
                         break;
                     case ClimbersEntry.TYPE_PAYMENT_SUBSCRIPTION:
-                        climber.put("payment_to_gran", 0);
-                        climber.put("payment_to_me", 0);
+                        climber.put("payment_to_gran", subscriptionCost);
+                        climber.put("payment_to_me", subscriptionCost);
                         break;
                     case ClimbersEntry.TYPE_PAYMENT_CERTIFICATE:
-                        climber.put("payment_to_gran", -100);
-                        climber.put("payment_to_me", 100);
+                        climber.put("payment_to_gran", certificateCost);
+                        climber.put("payment_to_me", singleCost);
                         break;
                     case ClimbersEntry.TYPE_PAYMENT_SPECIAL:
-                        climber.put("payment_to_gran", 100);
+                        climber.put("payment_to_gran", singleCost);
                         climber.put("payment_to_me", 0);
                 }
                 trainingJsonObject.put(String.valueOf(climberId), climber);
 
                 // Добавляет новый элемент trainingJsonObject в climberArrayList
                 addClimberToArrayList(trainingJsonObject.names().length() - 1);
-//                Log.v("climberArrayList in -1", climberArrayList.get(climberArrayList.size() - 1).toString());
 
             } catch (JSONException e) {
                 e.printStackTrace();

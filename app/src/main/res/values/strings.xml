@@ -58,6 +58,8 @@
     <string name="gender">gender</string>
     <string name="end_of_training_dialog_massage">Are you sure you want to finish the training</string>
     <string name="cancel">Cancel</string>
+    <string name="settings_single_cost_key">single_cost</string>
+    <string name="settings_subscription_cost_key">subscription_cost</string>
 
 
 </resources>

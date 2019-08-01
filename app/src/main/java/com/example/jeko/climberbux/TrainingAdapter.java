@@ -24,7 +24,6 @@ public class TrainingAdapter extends ArrayAdapter<Climber> {
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         final ViewHolder holder;
-//        View listItemView = convertView;
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(
                     R.layout.list_training, parent, false);

@@ -13,14 +13,12 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -158,7 +156,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             setTitle(getString(R.string.add_a_climber_title));
             mPaymentTextView.setVisibility(View.GONE);
             // Invalidate the options menu, so the "Delete" menu option can be hidden.
-            // (It doesn't make sense to delete a book that hasn't been created yet.)
             invalidateOptionsMenu();
         } else {
             setTitle(getString(R.string.edit_climber_title));

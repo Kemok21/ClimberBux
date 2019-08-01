@@ -46,6 +46,14 @@
             android:name=".IncomeActivity"
             android:parentActivityName=".MainActivity"
             tools:targetApi="jelly_bean" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="Settings"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.jeko.climberbux.MainActivity"/>
+        </activity>
     </application>
 
 </manifest>
