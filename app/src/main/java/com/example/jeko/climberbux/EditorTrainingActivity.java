@@ -76,8 +76,8 @@ public class EditorTrainingActivity extends AppCompatActivity implements LoaderM
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 final Climber climber = climberArrayList.get(position);
                 AlertDialog.Builder builder = new AlertDialog.Builder(EditorTrainingActivity.this);
-                builder.setTitle("Edit field");
-                builder.setMessage("Save new payment or Remove a climber from the training?");
+                builder.setTitle(getString(R.string.edit_field));
+                builder.setMessage(getString(R.string.save_payment_or_remove_climber));
 
                 LinearLayout layout = new LinearLayout(EditorTrainingActivity.this);
                 layout.setOrientation(LinearLayout.VERTICAL);
@@ -88,36 +88,36 @@ public class EditorTrainingActivity extends AppCompatActivity implements LoaderM
 
                 // EditText for payment to Gran
                 final EditText inputGran = new EditText(EditorTrainingActivity.this);
-                inputGran.setHint("Payment to Gran");
+                inputGran.setHint(getString(R.string.payment_to_gran));
                 inputGran.setInputType(InputType.TYPE_CLASS_NUMBER);
                 inputGran.setLayoutParams(lp);
                 String toGran = climber.getPaymentGran();
-                if (toGran.equals("0")) {
+                if (toGran.equals(getString(R.string.non_payment))) {
                     inputGran.setText("");
                 } else inputGran.setText(toGran);
                 layout.addView(inputGran);
 
                 // EditText for payment to Me
                 final EditText inputMe = new EditText(EditorTrainingActivity.this);
-                inputMe.setHint("Payment to Me");
+                inputMe.setHint(getString(R.string.payment_to_me));
                 inputMe.setInputType(InputType.TYPE_CLASS_NUMBER);
                 inputMe.setLayoutParams(lp);
                 String toMe = climber.getPaymentMe();
-                if (toMe.equals("0")) {
+                if (toMe.equals(getString(R.string.non_payment))) {
                     inputMe.setText("");
                 } else inputMe.setText(toMe);
                 layout.addView(inputMe);
 
                 builder.setView(layout);
 
-                builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(getString(R.string.save_button), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         long keyId = climber.getId();
                         String paymentToGran = inputGran.getText().toString();
-                        if (paymentToGran.equals("")) paymentToGran = "0";
+                        if (paymentToGran.equals("")) paymentToGran = getString(R.string.non_payment);
                         String paymentToMe = inputMe.getText().toString();
-                        if (paymentToMe.equals("")) paymentToMe = "0";
+                        if (paymentToMe.equals("")) paymentToMe = getString(R.string.non_payment);
 
                         Uri currentPaymentUri = ContentUris.withAppendedId(PaymentsEntry.CONTENT_URI, keyId);
                         ContentValues paymentValues = new ContentValues();
@@ -136,7 +136,7 @@ public class EditorTrainingActivity extends AppCompatActivity implements LoaderM
                     }
                 });
 
-                builder.setNegativeButton("Remove", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(getString(R.string.remove_button), new DialogInterface.OnClickListener() {
                     @TargetApi(Build.VERSION_CODES.KITKAT)
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -215,7 +215,7 @@ public class EditorTrainingActivity extends AppCompatActivity implements LoaderM
     private void dateOfTraining() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(EditorTrainingActivity.this);
-        builder.setTitle("Choose a date ");
+        builder.setTitle(getString(R.string.choose_a_date_title));
 
         LinearLayout layout = new LinearLayout(EditorTrainingActivity.this);
         layout.setOrientation(LinearLayout.VERTICAL);
@@ -239,7 +239,7 @@ public class EditorTrainingActivity extends AppCompatActivity implements LoaderM
         layout.addView(calendarView);
         builder.setView(layout);
 
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(R.string.ok_button), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 int year = mChangedDate.getYear();
@@ -259,7 +259,7 @@ public class EditorTrainingActivity extends AppCompatActivity implements LoaderM
             }
         });
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {}
         });

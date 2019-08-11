@@ -9,69 +9,50 @@
 
     <TextView
         android:id="@+id/date_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0.00.0000"
-        android:padding="16dp"
+        style="@style/TextViewInListOnDate"
+        android:padding="@dimen/padding_list_on_dates_text"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textSize="16sp"
-        android:textColor="@color/text_color_app"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/count_of_climbers_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        android:padding="16dp"
+        style="@style/TextViewInListOnDate"
+        android:padding="@dimen/padding_list_on_dates_text"
         app:layout_constraintRight_toLeftOf="@id/climbers_text_view"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textSize="16sp"
-        android:textColor="@color/text_color_app"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/climbers_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/TextViewInListOnDate"
         android:text="@string/climbers"
-        android:paddingVertical="16dp"
+        android:paddingVertical="@dimen/padding_list_on_dates_text"
         app:layout_constraintLeft_toRightOf="@id/date_text_view"
         app:layout_constraintRight_toLeftOf="@id/income_text_view"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textSize="16sp"
-        android:textColor="@color/text_color_app"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/income_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Income:"
-        android:paddingVertical="16dp"
+        style="@style/TextViewInListOnDate"
+        android:text="@string/income"
+        android:paddingVertical="@dimen/padding_list_on_dates_text"
         app:layout_constraintRight_toLeftOf="@id/sum_of_income_text_view"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textSize="16sp"
-        android:textColor="@color/text_color_app"
-        />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/sum_of_income_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="000"
-        android:padding="16dp"
+        style="@style/TextViewInListOnDate"
+        android:padding="@dimen/padding_list_on_dates_text"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textSize="16sp"
-        android:textColor="@color/text_color_app"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
-    <LinearLayout
-        android:id="@+id/details_linear_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/date_text_view"
-        android:visibility="gone"
-        android:orientation="vertical">
+    <!--<LinearLayout-->
+        <!--android:id="@+id/details_linear_layout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/date_text_view"-->
+        <!--android:visibility="gone"-->
+        <!--android:orientation="vertical">-->
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
 </android.support.constraint.ConstraintLayout>

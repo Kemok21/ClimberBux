@@ -6,7 +6,7 @@
 
     <item
         android:id="@+id/action_date_of_training"
-        android:title="Date of training"
+        android:title="@string/date_of_training"
         android:icon="@drawable/ic_menu_manage"
         app:showAsAction="ifRoom"
         />

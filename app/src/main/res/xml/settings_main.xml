@@ -4,17 +4,17 @@
     android:title="Settings">
 
     <EditTextPreference
-        android:defaultValue="200"
+        android:defaultValue="@string/pref_default_value_single_cost"
         android:inputType="number"
-        android:key="single_cost"
+        android:key="@string/pref_key_single_cost"
         android:selectAllOnFocus="true"
-        android:title="Single cost" />
+        android:title="@string/pref_title_single_cost" />
 
     <EditTextPreference
-        android:defaultValue="1600"
+        android:defaultValue="@string/pref_default_value_subscription_cost"
         android:inputType="number"
-        android:key="subscription_cost"
+        android:key="@string/pref_key_subscription_cost"
         android:selectAllOnFocus="true"
-        android:title="Subscription cost"/>
+        android:title="@string/pref_title_subscription_cost"/>
 
 </PreferenceScreen>

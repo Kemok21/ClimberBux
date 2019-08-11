@@ -56,13 +56,13 @@ public class Climber {
         return mPayed;
     }
 
-    public void setPaymentGran(int paymentGran) {
-        mPaymentGran = paymentGran;
-    }
-
-    public void setPaymentMe(int paymentMe) {
-        mPaymentMe = paymentMe;
-    }
+//    public void setPaymentGran(int paymentGran) {
+//        mPaymentGran = paymentGran;
+//    }
+//
+//    public void setPaymentMe(int paymentMe) {
+//        mPaymentMe = paymentMe;
+//    }
 
     @Override
     public String toString() {

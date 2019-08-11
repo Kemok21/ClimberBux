@@ -28,27 +28,32 @@
 
         <activity
             android:name=".ClimbersActivity"
+            android:label="@string/climbers"
             android:parentActivityName=".MainActivity"
             tools:targetApi="jelly_bean" />
         <activity
             android:name=".EditorActivity"
+            android:label="@string/edit_climber_title"
             android:parentActivityName=".ClimbersActivity"
             tools:targetApi="jelly_bean" />
         <activity
             android:name=".TrainingActivity"
+            android:label="@string/training"
             android:parentActivityName=".MainActivity"
             tools:targetApi="jelly_bean" />
         <activity
             android:name=".OnDatesActivity"
+            android:label="@string/training_on_dates"
             android:parentActivityName=".MainActivity"
             tools:targetApi="jelly_bean" />
         <activity
             android:name=".IncomeActivity"
+            android:label="@string/sum_of_income"
             android:parentActivityName=".MainActivity"
             tools:targetApi="jelly_bean" />
         <activity
             android:name=".SettingsActivity"
-            android:label="Settings"
+            android:label="@string/action_settings"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

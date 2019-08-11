@@ -33,13 +33,13 @@ public class ClimberCursorAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder holder = (ViewHolder) view.getTag();
         // Find the columns of climber attributes that we're interested in
-        int idColumnIndex = cursor.getColumnIndexOrThrow(ClimbersContract.ClimbersEntry._ID);
+//        int idColumnIndex = cursor.getColumnIndexOrThrow(ClimbersContract.ClimbersEntry._ID);
         int nameColumnIndex = cursor.getColumnIndexOrThrow(ClimbersContract.ClimbersEntry.COLUMN_NAME);
         int genderColumnIndex = cursor.getColumnIndexOrThrow(ClimbersContract.ClimbersEntry.COLUMN_GENDER);
         int ageColumnIndex = cursor.getColumnIndexOrThrow(ClimbersContract.ClimbersEntry.COLUMN_AGE);
 
         // Extract properties from cursor
-        final long climberId = cursor.getLong(idColumnIndex);
+//        final long climberId = cursor.getLong(idColumnIndex);
         final String name = cursor.getString(nameColumnIndex);
         final int gender = cursor.getInt(genderColumnIndex);
         final int age = cursor.getInt(ageColumnIndex);

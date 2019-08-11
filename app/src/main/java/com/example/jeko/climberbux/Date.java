@@ -8,7 +8,6 @@ public class Date {
     private int mCountClimber;
     private int mTrainingIncome;
     private ArrayList<Long> mPaymentIdList;
-    private boolean isVisibilityFlag = false;
 
     public Date(String trainingDate, int countClimber, int trainingIncome, ArrayList<Long> paymentIdList) {
         mTrainingDate = trainingDate;
@@ -31,13 +30,5 @@ public class Date {
 
     public ArrayList<Long> getPaymentIdList() {
         return mPaymentIdList;
-    }
-
-    public boolean isVisibilityFlag() {
-        return isVisibilityFlag;
-    }
-
-    public void setVisibilityFlag(boolean visibilityFlag) {
-        isVisibilityFlag = visibilityFlag;
     }
 }

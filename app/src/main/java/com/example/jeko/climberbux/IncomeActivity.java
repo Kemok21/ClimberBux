@@ -36,8 +36,8 @@ public class IncomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_income);
         ButterKnife.bind(this);
 
-        if (mLastMonth.equals("0")) {
-            mLastMonth = "12";
+        if (mLastMonth.equals(getString(R.string.calendar_december))) {
+            mLastMonth = getString(R.string.december);
             mLastYear = String.valueOf(currentDate.get(Calendar.YEAR) - 1);
         }
 

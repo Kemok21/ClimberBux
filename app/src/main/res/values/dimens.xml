@@ -34,7 +34,16 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-
+    <dimen name="scrollbar_size_spinner">16dp</dimen>
+    <dimen name="padding_top_linear_layout_payments">8dp</dimen>
+    <dimen name="padding_list_on_dates_text">16dp</dimen>
+    <dimen name="text_size_list_on_dates">16sp</dimen>
+    <dimen name="padding_list_training">16dp</dimen>
+    <dimen name="list_training_name_padding">4dp</dimen>
+    <dimen name="list_training_type_payment_padding">4dp</dimen>
+    <dimen name="list_training_payment_width">56dp</dimen>
+    <dimen name="list_training_payment_height">32dp</dimen>
+    <dimen name="list_training_payment_padding">8dp</dimen>
 
 
 </resources>

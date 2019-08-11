@@ -59,7 +59,8 @@
     <style name="TextViewInListOnDate">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <!--Не использованая-->
+        <item name="android:textSize">@dimen/text_size_list_on_dates</item>
+        <item name="android:textColor">@color/text_color_app</item>
     </style>
 
 </resources>

@@ -33,6 +33,19 @@ import butterknife.ButterKnife;
 public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int CLIMBER_LOADER = 0;
+    private static final int GENDER_MALE = 1;
+    private static final int GENDER_FEMALE = 2;
+    private static final int GENDER_UNKNOWN = 0;
+    private static final int RANK_THREE = 1;
+    private static final int RANK_TWO = 2;
+    private static final int RANK_ONE = 3;
+    private static final int RANK_KMS = 4;
+    private static final int RANK_MS = 5;
+    private static final int RANK_BR = 0;
+    private static final int TYPE_PAYMENT_SUBSCRIPTION = 1;
+    private static final int TYPE_PAYMENT_CERTIFICATE = 2;
+    private static final int TYPE_PAYMENT_SPECIAL = 3;
+    private static final int TYPE_PAYMENT_SINGLE = 0;
 
     @BindView(R.id.spinner_gender)
     Spinner mGenderSpinner;
@@ -266,13 +279,13 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     private void updateClimberNameInPaymentsDB(String climberId, String name) {
-        String[] projection = new String[]{
-                PaymentsEntry._ID,
-                PaymentsEntry.COLUMN_CLIMBER_ID,
-                PaymentsEntry.COLUMN_CLIMBER_NAME,
-                PaymentsEntry.COLUMN_DATE,
-                PaymentsEntry.COLUMN_PAYED_TO_GRAN,
-                PaymentsEntry.COLUMN_PAYED_TO_ME};
+//        String[] projection = new String[]{
+//                PaymentsEntry._ID,
+//                PaymentsEntry.COLUMN_CLIMBER_ID,
+//                PaymentsEntry.COLUMN_CLIMBER_NAME,
+//                PaymentsEntry.COLUMN_DATE,
+//                PaymentsEntry.COLUMN_PAYED_TO_GRAN,
+//                PaymentsEntry.COLUMN_PAYED_TO_ME};
 
         String selection = PaymentsEntry.COLUMN_CLIMBER_ID + " = ?";
         String[] selectionArgs = {climberId};
@@ -366,47 +379,47 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             mAgeEditText.setText(Integer.toString(age));
             switch (gender) {
                 case ClimbersEntry.GENDER_MALE:
-                    mGenderSpinner.setSelection(1);
+                    mGenderSpinner.setSelection(GENDER_MALE);
                     break;
                 case ClimbersEntry.GENDER_FEMALE:
-                    mGenderSpinner.setSelection(2);
+                    mGenderSpinner.setSelection(GENDER_FEMALE);
                     break;
                 default:
-                    mGenderSpinner.setSelection(0);
+                    mGenderSpinner.setSelection(GENDER_UNKNOWN);
                     break;
             }
             switch (rank) {
                 case ClimbersEntry.RANK_THREE:
-                    mRankSpinner.setSelection(1);
+                    mRankSpinner.setSelection(RANK_THREE);
                     break;
                 case ClimbersEntry.RANK_TWO:
-                    mRankSpinner.setSelection(2);
+                    mRankSpinner.setSelection(RANK_TWO);
                     break;
                 case ClimbersEntry.RANK_ONE:
-                    mRankSpinner.setSelection(3);
+                    mRankSpinner.setSelection(RANK_ONE);
                     break;
                 case ClimbersEntry.RANK_KMS:
-                    mRankSpinner.setSelection(4);
+                    mRankSpinner.setSelection(RANK_KMS);
                     break;
                 case ClimbersEntry.RANK_MS:
-                    mRankSpinner.setSelection(5);
+                    mRankSpinner.setSelection(RANK_MS);
                     break;
                 default:
-                    mRankSpinner.setSelection(0);
+                    mRankSpinner.setSelection(RANK_BR);
                     break;
             }
             switch (payment) {
                 case ClimbersEntry.TYPE_PAYMENT_SUBSCRIPTION:
-                    mPaymentSpinner.setSelection(1);
+                    mPaymentSpinner.setSelection(TYPE_PAYMENT_SUBSCRIPTION);
                     break;
                 case ClimbersEntry.TYPE_PAYMENT_CERTIFICATE:
-                    mPaymentSpinner.setSelection(2);
+                    mPaymentSpinner.setSelection(TYPE_PAYMENT_CERTIFICATE);
                     break;
                 case ClimbersEntry.TYPE_PAYMENT_SPECIAL:
-                    mPaymentSpinner.setSelection(3);
+                    mPaymentSpinner.setSelection(TYPE_PAYMENT_SPECIAL);
                     break;
                 default:
-                    mPaymentSpinner.setSelection(0);
+                    mPaymentSpinner.setSelection(TYPE_PAYMENT_SINGLE);
                     break;
             }
         }
@@ -416,10 +429,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         // If the loader is invalidated, clear out all the data from the input fields.
         mNameEditText.setText("");
-        mGenderSpinner.setSelection(0);
+        mGenderSpinner.setSelection(GENDER_UNKNOWN);
         mAgeEditText.setText("");
-        mRankSpinner.setSelection(0);
-        mPaymentSpinner.setSelection(0);
+        mRankSpinner.setSelection(RANK_BR);
+        mPaymentSpinner.setSelection(TYPE_PAYMENT_SINGLE);
 
 
     }

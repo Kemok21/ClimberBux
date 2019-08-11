@@ -4,14 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="@dimen/padding_list_training">
 
     <TextView
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/border"
-        android:padding="4dp"
+        android:padding="@dimen/list_training_name_padding"
         android:textColor="@color/text_color_app"
         android:textSize="16sp"
         app:layout_constraintTop_toTopOf="parent" />
@@ -20,19 +20,19 @@
         android:id="@+id/type_payment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="4dp"
+        android:padding="@dimen/list_training_type_payment_padding"
         android:textColor="@color/text_color_app"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/name" />
 
     <TextView
         android:id="@+id/payment"
-        android:layout_width="56dp"
-        android:layout_height="32dp"
+        android:layout_width="@dimen/list_training_payment_width"
+        android:layout_height="@dimen/list_training_payment_height"
         android:background="@color/text_color_payment"
         android:focusable="false"
         android:gravity="center"
-        android:paddingHorizontal="8dp"
+        android:paddingHorizontal="@dimen/list_training_payment_padding"
         android:textColor="@color/text_color_app"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/name" />

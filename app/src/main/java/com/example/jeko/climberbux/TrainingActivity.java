@@ -425,7 +425,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
         String month = String.valueOf(mCurrentDay.getMonth());
         String year = String.valueOf(mCurrentDay.getYear());
         String date = day + "." + month + "." + year;
-        Log.v("DATE", date);
+//        Log.v("DATE", date);
         int count = climberArrayList.size();
         for (int i = count - 1; i >= 0; i--) {
             Climber climber = climberArrayList.get(i);
@@ -445,11 +445,10 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
             paymentValues.put(PaymentsEntry.COLUMN_PAYED_TO_ME, payedMe);
             Uri newUri = getContentResolver().insert(PaymentsEntry.CONTENT_URI, paymentValues);
 
-            // Изменить Climber isChecked, visits and payed
+            // Изменить Climber isChecked and payed
             Uri currentClimberUri = ContentUris.withAppendedId(ClimbersEntry.CONTENT_URI, climberId);
             ContentValues climberValues = new ContentValues();
             climberValues.put(ClimbersEntry.COLUMN_IS_CHECKED, 0);
-//            climberValues.put(ClimbersEntry.COLUMN_VISITS, String.valueOf(visits + 1));
             climberValues.put(ClimbersEntry.COLUMN_PAYED, payed + payedGran + payedMe);
             int updated = getContentResolver().update(currentClimberUri, climberValues, null, null);
 
@@ -541,7 +540,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         mCursor = cursor;
-        Log.v("CURSOR", cursor.toString());
+//        Log.v("CURSOR", cursor.toString());
     }
 
     @Override

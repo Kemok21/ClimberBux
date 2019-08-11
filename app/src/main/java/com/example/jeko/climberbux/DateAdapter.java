@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +26,6 @@ public class DateAdapter extends ArrayAdapter<Date> {
     public DateAdapter(@NonNull Activity context, @NonNull ArrayList<Date> objects) {
         super(context, 0, objects);
     }
-
-    boolean flag = false;
-
     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -62,69 +58,12 @@ public class DateAdapter extends ArrayAdapter<Date> {
         holder.dateTextView.setText(currentDate.getTrainingDate());
         holder.countOfClimbersTextView.setText(currentDate.getCountClimber());
         holder.sumOfIncomeTextView.setText(currentDate.getTrainingIncome());
-        if(holder.detailsLinearLayout.getChildCount() > 0) {
-            holder.detailsLinearLayout.removeAllViews();
-        }
-        for(long id : currentDate.getPaymentIdList()) {
-            holder.detailsLinearLayout.addView(addLayoutsOfClimbers(id));
-        }
-//        final View finalConvertView = convertView;
-//        convertView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                flag = false ? flag : true;
-//
-//                if(flag) holder.detailsLinearLayout.setVisibility(View.VISIBLE);
-//                else holder.detailsLinearLayout.setVisibility(View.GONE);
-////                Log.v("TAG", String.valueOf(finalConvertView.getTag()));
-////                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-////                        LinearLayout.LayoutParams.WRAP_CONTENT,
-////                        LinearLayout.LayoutParams.WRAP_CONTENT);
-//
-////                for(long id : currentDate.getPaymentIdList()) {
-////                    LinearLayout layout = new LinearLayout(getContext());
-////                    layout.setOrientation(LinearLayout.HORIZONTAL);
-////
-////                    String[] projection = new String[]{
-////                            PaymentsEntry._ID,
-////                            PaymentsEntry.COLUMN_CLIMBER_NAME,
-////                            PaymentsEntry.COLUMN_PAYED_TO_GRAN,
-////                            PaymentsEntry.COLUMN_PAYED_TO_ME
-////                    };
-////
-////                    Uri currentPaymentUri = ContentUris.withAppendedId(PaymentsEntry.CONTENT_URI, id);
-////                    Cursor cursor = getContext().getContentResolver().query(
-////                            currentPaymentUri,
-////                            projection,
-////                            null,
-////                            null,
-////                            null
-////                    );
-////                    cursor.moveToFirst();
-////                    int nameColumnIndex = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_CLIMBER_NAME);
-////                    int payedToGranColumnIndex = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_PAYED_TO_GRAN);
-////                    int payedToMeColumnIndex = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_PAYED_TO_ME);
-////
-////                    String name = cursor.getString(nameColumnIndex);
-////                    int payed = cursor.getInt(payedToGranColumnIndex) + cursor.getInt(payedToMeColumnIndex);
-////                    cursor.close();
-////
-////                    TextView nameTextView = new TextView(getContext());
-////                    nameTextView.setText(name);
-////                    nameTextView.setLayoutParams(lp);
-////                    layout.addView(nameTextView);
-////
-////                    TextView payedTextView = new TextView(getContext());
-////                    payedTextView.setText(String.valueOf(payed));
-////                    payedTextView.setLayoutParams(lp);
-////                    layout.addView(payedTextView);
-////
-////                    holder.detailsLinearLayout.addView(layout);
-////                }
-//            }
-//        });
-
+//        if(holder.detailsLinearLayout.getChildCount() > 0) {
+//            holder.detailsLinearLayout.removeAllViews();
+//        }
+//        for(long id : currentDate.getPaymentIdList()) {
+//            holder.detailsLinearLayout.addView(addLayoutsOfClimbers(id));
+//        }
         return convertView;
     }
 
@@ -132,13 +71,6 @@ public class DateAdapter extends ArrayAdapter<Date> {
 
             LinearLayout layout = new LinearLayout(getContext());
             layout.setOrientation(LinearLayout.HORIZONTAL);
-
-//                    String[] projection = new String[]{
-//                            PaymentsEntry._ID,
-//                            PaymentsEntry.COLUMN_CLIMBER_NAME,
-//                            PaymentsEntry.COLUMN_PAYED_TO_GRAN,
-//                            PaymentsEntry.COLUMN_PAYED_TO_ME
-//                    };
 
             Uri currentPaymentUri = ContentUris.withAppendedId(PaymentsEntry.CONTENT_URI, id);
             Cursor cursor = getContext().getContentResolver().query(
@@ -180,8 +112,8 @@ public class DateAdapter extends ArrayAdapter<Date> {
         @BindView(R.id.sum_of_income_text_view)
         TextView sumOfIncomeTextView;
 
-        @BindView(R.id.details_linear_layout)
-        LinearLayout detailsLinearLayout;
+//        @BindView(R.id.details_linear_layout)
+//        LinearLayout detailsLinearLayout;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
