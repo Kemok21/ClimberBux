@@ -122,7 +122,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
 
                 builder.setView(layout);
 
-                builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(getString(R.string.save_button), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String paymentToGran = inputGran.getText().toString();
@@ -147,7 +147,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                         trainingAdapter.notifyDataSetChanged();
                     }
                 });
-                builder.setNegativeButton("Remove", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(getString(R.string.remove_button), new DialogInterface.OnClickListener() {
                     @TargetApi(Build.VERSION_CODES.KITKAT)
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -485,9 +485,10 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
         layout.addView(calendarView);
         builder.setView(layout);
 
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Choose a date and End of training", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                showEndOfTrainingConfirmationDialog();
             }
         });
 

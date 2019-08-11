@@ -133,6 +133,8 @@ public class EditorTrainingActivity extends AppCompatActivity implements LoaderM
                         climberValues.put(ClimbersEntry.COLUMN_PAYED, climber.getPayed() + inequality);
                         int updateClimber = getContentResolver().update(climberUri, climberValues, null, null);
 
+                        trainingAdapter.notifyDataSetChanged();
+
                     }
                 });
 
@@ -144,6 +146,7 @@ public class EditorTrainingActivity extends AppCompatActivity implements LoaderM
 
                         Uri currentPaymentUri = ContentUris.withAppendedId(PaymentsEntry.CONTENT_URI, keyId);
                         getContentResolver().delete(currentPaymentUri, null, null);
+                        trainingAdapter.notifyDataSetChanged();
                     }
                 });
                 // create and show the alert dialog
