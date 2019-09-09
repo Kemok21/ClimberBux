@@ -1,6 +1,7 @@
 package com.example.jeko.climberbux;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -229,12 +231,30 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 saveClimber();
                 return true;
             case R.id.action_delete:
-                deleteClimber();
+                showDeleteClimberConfirmationDialog();
                 return true;
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(EditorActivity.this);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showDeleteClimberConfirmationDialog() {
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the positive and negative buttons on the dialog.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.delete_climber_dialog_massage);
+        builder.setPositiveButton(R.string.delete_climber, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // User clicked the "Delete" button, so delete the book.
+                deleteClimber();
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     private void saveClimber() {

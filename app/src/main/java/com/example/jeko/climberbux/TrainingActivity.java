@@ -132,7 +132,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
 
                         // Добавляем новое значение в trainingJsonObject и climberArrayList
                         try {
-                            String keyId = String.valueOf(climberArrayList.get(position).getId());
+                            String keyId = String.valueOf(climberArrayList.get(position).getClimberId());
                             JSONObject climberJsonObject = trainingJsonObject.getJSONObject(keyId);
                             climberJsonObject.put("payment_to_gran", Integer.parseInt(paymentToGran));
                             climberJsonObject.put("payment_to_me", Integer.parseInt(paymentToMe));
@@ -151,7 +151,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                     @TargetApi(Build.VERSION_CODES.KITKAT)
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        long keyId = climberArrayList.get(position).getId();
+                        long keyId = climberArrayList.get(position).getClimberId();
                         trainingJsonObject.remove(String.valueOf(keyId));
                         climberArrayList.remove(position);
 
@@ -217,9 +217,9 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
                             // Удаляет кликнутый элемент из climberArrayList и trainingJsonObject
                             for (int i = 0; i < climberArrayList.size(); i++) {
                                 Climber climber = climberArrayList.get(i);
-                                if (climber.getId() == finalIds[which]) {
+                                if (climber.getClimberId() == finalIds[which]) {
                                     climberArrayList.remove(i);
-                                    trainingJsonObject.remove(String.valueOf(climber.getId()));
+                                    trainingJsonObject.remove(String.valueOf(climber.getClimberId()));
                                     break;
                                 }
                             }
@@ -298,7 +298,9 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
         try {
             String keyId = trainingJsonObject.names().getString(i);
             JSONObject climberJson = trainingJsonObject.getJSONObject(keyId);
-            Climber climber = new Climber(this,
+            Climber climber = new Climber(
+                    this,
+                    0,
                     climberJson.getInt("id"),
                     climberJson.getString("name"),
                     climberJson.getInt("type_payment"),
@@ -429,7 +431,7 @@ public class TrainingActivity extends AppCompatActivity implements LoaderManager
         int count = climberArrayList.size();
         for (int i = count - 1; i >= 0; i--) {
             Climber climber = climberArrayList.get(i);
-            long climberId = climber.getId();
+            long climberId = climber.getClimberId();
             String climberName = climber.getName();
             int payedGran = Integer.parseInt(climber.getPaymentGran());
             int payedMe = Integer.parseInt(climber.getPaymentMe());

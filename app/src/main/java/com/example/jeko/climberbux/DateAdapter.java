@@ -1,9 +1,6 @@
 package com.example.jeko.climberbux;
 
 import android.app.Activity;
-import android.content.ContentUris;
-import android.database.Cursor;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -67,40 +64,40 @@ public class DateAdapter extends ArrayAdapter<Date> {
         return convertView;
     }
 
-    private View addLayoutsOfClimbers(long id) {
-
-            LinearLayout layout = new LinearLayout(getContext());
-            layout.setOrientation(LinearLayout.HORIZONTAL);
-
-            Uri currentPaymentUri = ContentUris.withAppendedId(PaymentsEntry.CONTENT_URI, id);
-            Cursor cursor = getContext().getContentResolver().query(
-                    currentPaymentUri,
-                    projection,
-                    null,
-                    null,
-                    null
-            );
-            cursor.moveToFirst();
-            int nameColumnIndex = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_CLIMBER_NAME);
-            int payedToGranColumnIndex = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_PAYED_TO_GRAN);
-            int payedToMeColumnIndex = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_PAYED_TO_ME);
-
-            String name = cursor.getString(nameColumnIndex);
-            int payed = cursor.getInt(payedToGranColumnIndex) + cursor.getInt(payedToMeColumnIndex);
-            cursor.close();
-
-            TextView nameTextView = new TextView(getContext());
-            nameTextView.setText(name);
-            nameTextView.setLayoutParams(lp);
-            layout.addView(nameTextView);
-
-            TextView payedTextView = new TextView(getContext());
-            payedTextView.setText(String.valueOf(payed));
-            payedTextView.setLayoutParams(lp);
-            layout.addView(payedTextView);
-
-        return layout;
-    }
+//    private View addLayoutsOfClimbers(long id) {
+//
+//            LinearLayout layout = new LinearLayout(getContext());
+//            layout.setOrientation(LinearLayout.HORIZONTAL);
+//
+//            Uri currentPaymentUri = ContentUris.withAppendedId(PaymentsEntry.CONTENT_URI, id);
+//            Cursor cursor = getContext().getContentResolver().query(
+//                    currentPaymentUri,
+//                    projection,
+//                    null,
+//                    null,
+//                    null
+//            );
+//            cursor.moveToFirst();
+//            int nameColumnIndex = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_CLIMBER_NAME);
+//            int payedToGranColumnIndex = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_PAYED_TO_GRAN);
+//            int payedToMeColumnIndex = cursor.getColumnIndexOrThrow(PaymentsEntry.COLUMN_PAYED_TO_ME);
+//
+//            String name = cursor.getString(nameColumnIndex);
+//            int payed = cursor.getInt(payedToGranColumnIndex) + cursor.getInt(payedToMeColumnIndex);
+//            cursor.close();
+//
+//            TextView nameTextView = new TextView(getContext());
+//            nameTextView.setText(name);
+//            nameTextView.setLayoutParams(lp);
+//            layout.addView(nameTextView);
+//
+//            TextView payedTextView = new TextView(getContext());
+//            payedTextView.setText(String.valueOf(payed));
+//            payedTextView.setLayoutParams(lp);
+//            layout.addView(payedTextView);
+//
+//        return layout;
+//    }
 
     public class ViewHolder {
         @BindView(R.id.date_text_view)

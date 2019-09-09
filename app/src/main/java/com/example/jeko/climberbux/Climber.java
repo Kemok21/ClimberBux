@@ -5,7 +5,8 @@ import com.example.jeko.climberbux.data.ClimbersContract.ClimbersEntry;
 
 public class Climber {
 
-    private long mId;
+    private long mPaymentId;
+    private long mClimberId;
     private String mName;
     private int mTypePayment;
     private int mPaymentGran;
@@ -13,9 +14,10 @@ public class Climber {
     private int mPayed;
     private Context mContext;
 
-    public Climber(Context context, long id, String name, int typePayment, int paymentGran, int paymentMe, int payed) {
+    public Climber(Context context, long paymentId, long climberId, String name, int typePayment, int paymentGran, int paymentMe, int payed) {
         mContext = context;
-        mId = id;
+        mPaymentId = paymentId;
+        mClimberId = climberId;
         mName = name;
         mTypePayment = typePayment;
         mPaymentGran = paymentGran;
@@ -23,8 +25,12 @@ public class Climber {
         mPayed = payed;
     }
 
-    public long getId() {
-        return mId;
+    public long getClimberId() {
+        return mClimberId;
+    }
+
+    public long getPaymentId() {
+        return mPaymentId;
     }
 
     public String getName() {

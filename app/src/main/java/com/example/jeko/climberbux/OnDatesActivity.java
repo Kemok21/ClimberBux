@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
 public class OnDatesActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int PAYMENT_LOADER = 0;
-    private DateAdapter dateAdapter;
+    private DateAdapter mDateAdapter;
     private ArrayList<Date> dateArrayList = new ArrayList<>();
 
     @BindView(R.id.list_view_on_dates)
@@ -38,8 +38,8 @@ public class OnDatesActivity extends AppCompatActivity implements LoaderManager.
 
         getLoaderManager().initLoader(PAYMENT_LOADER, null, this);
 
-        dateAdapter = new DateAdapter(this, dateArrayList);
-        onDateListView.setAdapter(dateAdapter);
+        mDateAdapter = new DateAdapter(this, dateArrayList);
+        onDateListView.setAdapter(mDateAdapter);
 
         onDateListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -128,12 +128,12 @@ public class OnDatesActivity extends AppCompatActivity implements LoaderManager.
 
             dateArrayList.add(new Date(date, countClimbers, trainingIncome, paymentIdList));
         }
-        dateAdapter.notifyDataSetChanged();
+        mDateAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         dateArrayList.removeAll(dateArrayList);
-        dateAdapter.notifyDataSetChanged();
+        mDateAdapter.notifyDataSetChanged();
     }
 }

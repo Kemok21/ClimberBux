@@ -1,12 +1,16 @@
 package com.example.jeko.climberbux;
 
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import com.example.jeko.climberbux.data.ClimbersContract.PaymentsEntry;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,21 +18,27 @@ import java.util.regex.Pattern;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class IncomeActivity extends AppCompatActivity {
+public class IncomeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
+    private static final int PAYMENT_LOADER = 0;
     Calendar currentDate = Calendar.getInstance();
-    protected String mLastYear = String.valueOf(currentDate.get(Calendar.YEAR));
-    @BindView(R.id.current_income_gran)
-    TextView currentIncomeGranTextView;
-    @BindView(R.id.current_income_me)
-    TextView currentIncomeMeTextView;
-    @BindView(R.id.last_income_gran)
-    TextView lastIncomeGranTextView;
-    @BindView(R.id.last_income_me)
-    TextView lastIncomeMeTextView;
+
+    private IncomeAdapter mIncomeAdapter;
+    private ArrayList<PayedByMonth> payedByMonthArrayList = new ArrayList<>();
+
+    @BindView(R.id.list_view_payed)
+    ListView payedListView;
+//    @BindView(R.id.current_income_me)
+//    TextView currentIncomeMeTextView;
+//    @BindView(R.id.last_income_gran)
+//    TextView lastIncomeGranTextView;
+//    @BindView(R.id.last_income_me)
+//    TextView lastIncomeMeTextView;
+
     private String mCurrentMonth = String.valueOf(currentDate.get(Calendar.MONTH) + 1);
     private String mCurrentYear = String.valueOf(currentDate.get(Calendar.YEAR));
     private String mLastMonth = String.valueOf(currentDate.get(Calendar.MONTH));
+    private String mLastYear = String.valueOf(currentDate.get(Calendar.YEAR) - 1);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,17 +48,39 @@ public class IncomeActivity extends AppCompatActivity {
 
         if (mLastMonth.equals(getString(R.string.calendar_december))) {
             mLastMonth = getString(R.string.december);
-            mLastYear = String.valueOf(currentDate.get(Calendar.YEAR) - 1);
+//            mLastYear = String.valueOf(currentDate.get(Calendar.YEAR) - 1);
         }
 
+        getLoaderManager().initLoader(PAYMENT_LOADER, null, this);
+
+        mIncomeAdapter = new IncomeAdapter(this, payedByMonthArrayList);
+        payedListView.setAdapter(mIncomeAdapter);
+
+//        currentIncomeGranTextView.setText(String.valueOf(currentIncomeGran));
+//        currentIncomeMeTextView.setText(String.valueOf(currentIncomeMe));
+//        lastIncomeGranTextView.setText(String.valueOf(lastIncomeGran));
+//        lastIncomeMeTextView.setText(String.valueOf(lastIncomeMe));
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         String[] projection = new String[]{
                 PaymentsEntry._ID,
                 PaymentsEntry.COLUMN_PAYED_TO_ME,
                 PaymentsEntry.COLUMN_PAYED_TO_GRAN,
                 PaymentsEntry.COLUMN_DATE
         };
-        Cursor cursor = getContentResolver().query(PaymentsEntry.CONTENT_URI, projection, null, null, null);
 
+        return new CursorLoader(this,
+                PaymentsEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         int currentIncomeGran = 0;
         int currentIncomeMe = 0;
         int lastIncomeGran = 0;
@@ -64,15 +96,17 @@ public class IncomeActivity extends AppCompatActivity {
             int payedToMe = cursor.getInt(indexPayedToMe);
             String date = cursor.getString(indexDate);
 
-            Pattern pattern = Pattern.compile("\\d+\\.(\\d+)\\.(\\d+)");
+            Pattern pattern = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)");
             Matcher matcher = pattern.matcher(date);
 
             String month = null;
             String year = null;
+            String day = null;
 
             if (matcher.find()) {
-                month = matcher.group(1);
-                year = matcher.group(2);
+                day = matcher.group(1);
+                month = matcher.group(2);
+                year = matcher.group(3);
             }
             if (month.equals(mCurrentMonth) && year.equals(mCurrentYear)) {
                 currentIncomeGran += payedToGran;
@@ -83,9 +117,15 @@ public class IncomeActivity extends AppCompatActivity {
             }
         }
 
-        currentIncomeGranTextView.setText(String.valueOf(currentIncomeGran));
-        currentIncomeMeTextView.setText(String.valueOf(currentIncomeMe));
-        lastIncomeGranTextView.setText(String.valueOf(lastIncomeGran));
-        lastIncomeMeTextView.setText(String.valueOf(lastIncomeMe));
+        payedByMonthArrayList.add(new PayedByMonth(mCurrentMonth, mCurrentYear, currentIncomeGran, currentIncomeMe));
+        payedByMonthArrayList.add(new PayedByMonth(mLastMonth, mLastYear, lastIncomeGran, lastIncomeMe));
+
+        mIncomeAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        payedByMonthArrayList.removeAll(payedByMonthArrayList);
+        mIncomeAdapter.notifyDataSetChanged();
     }
 }

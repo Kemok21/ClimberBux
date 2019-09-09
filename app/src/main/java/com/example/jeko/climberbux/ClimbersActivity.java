@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
 public class ClimbersActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int CLIMBER_LOADER = 0;
-    ClimberCursorAdapter mCursorAdapter;
+    private ClimberCursorAdapter mCursorAdapter;
 
     @BindView(R.id.list_view_climber)
     ListView climberListView;

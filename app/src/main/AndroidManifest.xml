@@ -10,7 +10,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EditorTrainingActivity"></activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
@@ -36,6 +35,11 @@
             android:label="@string/edit_climber_title"
             android:parentActivityName=".ClimbersActivity"
             tools:targetApi="jelly_bean" />
+        <activity
+            android:name=".EditorTrainingActivity"
+            android:label="@string/training_on_date"
+            android:parentActivityName=".OnDatesActivity">
+        </activity>
         <activity
             android:name=".TrainingActivity"
             android:label="@string/training"
