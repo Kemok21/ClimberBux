@@ -36,7 +36,7 @@ public class IncomeAdapter extends ArrayAdapter<PayedByMonth> {
 
         final PayedByMonth currentPayedByMonth = getItem(position);
 
-        holder.dateTextView.setText(currentPayedByMonth.getMonth() + "-" + currentPayedByMonth.getYear());
+        holder.dateTextView.setText(currentPayedByMonth.getMonth());
         holder.toGranValueTextView.setText(String.valueOf(currentPayedByMonth.getIncomeToGran()));
         holder.toMeValueTextView.setText(String.valueOf(currentPayedByMonth.getIncomeToMe()));
 

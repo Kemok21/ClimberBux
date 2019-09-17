@@ -204,7 +204,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 projection,
                 selection,
                 selectionArgs,
-                null);
+                PaymentsEntry._ID + " DESC");
     }
 
     @Override
@@ -332,7 +332,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         //Close the Activity
         finish();
     }
-
 
     private void setupSpinner(int arrayId, Spinner spinner, AdapterView.OnItemSelectedListener listener) {
         // Create adapter for spinner. The list options are from the String array it will use

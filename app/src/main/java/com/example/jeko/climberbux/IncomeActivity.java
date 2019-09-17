@@ -12,6 +12,8 @@ import com.example.jeko.climberbux.data.ClimbersContract.PaymentsEntry;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -81,10 +83,12 @@ public class IncomeActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        int currentIncomeGran = 0;
-        int currentIncomeMe = 0;
-        int lastIncomeGran = 0;
-        int lastIncomeMe = 0;
+//        int currentIncomeGran = 0;
+//        int currentIncomeMe = 0;
+//        int lastIncomeGran = 0;
+//        int lastIncomeMe = 0;
+
+        Map<String, int[]> monthTM = new TreeMap<>();
 
         while (cursor.moveToNext()) {
 
@@ -100,25 +104,38 @@ public class IncomeActivity extends AppCompatActivity implements LoaderManager.L
             Matcher matcher = pattern.matcher(date);
 
             String month = null;
-            String year = null;
-            String day = null;
+//            String year = null;
+//            String day = null;
 
             if (matcher.find()) {
-                day = matcher.group(1);
-                month = matcher.group(2);
-                year = matcher.group(3);
+//                day = matcher.group(1);
+                month = matcher.group(2) + "." + matcher.group(3);
+//                year = matcher.group(3);
             }
-            if (month.equals(mCurrentMonth) && year.equals(mCurrentYear)) {
-                currentIncomeGran += payedToGran;
-                currentIncomeMe += payedToMe;
-            } else if (month.equals(mLastMonth) && year.equals(mCurrentYear)) {
-                lastIncomeGran += payedToGran;
-                lastIncomeMe += payedToMe;
+
+            if (monthTM.containsKey(month)) {
+                monthTM.put(month, new int[]{monthTM.get(month)[0] + payedToGran, monthTM.get(month)[1] + payedToMe});
+            } else {
+                monthTM.put(month, new int[]{payedToGran, payedToMe});
             }
+//            if (matcher.group(2).equals(mCurrentMonth) && matcher.group(3).equals(mCurrentYear)) {
+//                currentIncomeGran += payedToGran;
+//                currentIncomeMe += payedToMe;
+//            } else if (matcher.group(2).equals(mLastMonth) && matcher.group(3).equals(mCurrentYear)) {
+//                lastIncomeGran += payedToGran;
+//                lastIncomeMe += payedToMe;
+//            }
         }
 
-        payedByMonthArrayList.add(new PayedByMonth(mCurrentMonth, mCurrentYear, currentIncomeGran, currentIncomeMe));
-        payedByMonthArrayList.add(new PayedByMonth(mLastMonth, mLastYear, lastIncomeGran, lastIncomeMe));
+        for (String m : monthTM.keySet()) {
+            payedByMonthArrayList.add(0, new PayedByMonth(//проверить
+                    m,
+                    monthTM.get(m)[0],
+                    monthTM.get(m)[1]
+            ));
+        }
+//        payedByMonthArrayList.add(new PayedByMonth(mCurrentMonth, currentIncomeGran, currentIncomeMe));
+//        payedByMonthArrayList.add(new PayedByMonth(mLastMonth, lastIncomeGran, lastIncomeMe));
 
         mIncomeAdapter.notifyDataSetChanged();
     }

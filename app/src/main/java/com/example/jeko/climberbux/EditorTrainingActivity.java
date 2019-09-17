@@ -208,9 +208,14 @@ public class EditorTrainingActivity extends AppCompatActivity implements LoaderM
             Cursor climberCursor = getContentResolver().query(ClimbersEntry.CONTENT_URI, projection, selection, selectionArgs, null);
 
             climberCursor.moveToFirst();
-            int payed = climberCursor.getInt(climberCursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_PAYED));
-            int typePayment = climberCursor.getInt(climberCursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_TYPE_PAYMENT));
 
+            int payed = 0;
+            int typePayment = 0;
+
+            if(climberCursor.isFirst()) {
+                payed = climberCursor.getInt(climberCursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_PAYED));
+                typePayment = climberCursor.getInt(climberCursor.getColumnIndexOrThrow(ClimbersEntry.COLUMN_TYPE_PAYMENT));
+            }
 
             Climber climber = new Climber(
                     this,
