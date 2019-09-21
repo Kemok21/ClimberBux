@@ -3,8 +3,10 @@ package com.example.jeko.climberbux;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
@@ -37,21 +39,21 @@ public class IncomeActivity extends AppCompatActivity implements LoaderManager.L
 //    @BindView(R.id.last_income_me)
 //    TextView lastIncomeMeTextView;
 
-    private String mCurrentMonth = String.valueOf(currentDate.get(Calendar.MONTH) + 1);
-    private String mCurrentYear = String.valueOf(currentDate.get(Calendar.YEAR));
-    private String mLastMonth = String.valueOf(currentDate.get(Calendar.MONTH));
-    private String mLastYear = String.valueOf(currentDate.get(Calendar.YEAR) - 1);
+//    private String mCurrentMonth = String.valueOf(currentDate.get(Calendar.MONTH) + 1);
+//    private String mCurrentYear = String.valueOf(currentDate.get(Calendar.YEAR));
+//    private String mLastMonth = String.valueOf(currentDate.get(Calendar.MONTH));
+//    private String mLastYear = String.valueOf(currentDate.get(Calendar.YEAR) - 1);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_income);
         ButterKnife.bind(this);
-
-        if (mLastMonth.equals(getString(R.string.calendar_december))) {
-            mLastMonth = getString(R.string.december);
+//
+//        if (mLastMonth.equals(getString(R.string.calendar_december))) {
+//            mLastMonth = getString(R.string.december);
 //            mLastYear = String.valueOf(currentDate.get(Calendar.YEAR) - 1);
-        }
+//        }
 
         getLoaderManager().initLoader(PAYMENT_LOADER, null, this);
 
@@ -89,6 +91,7 @@ public class IncomeActivity extends AppCompatActivity implements LoaderManager.L
 //        int lastIncomeMe = 0;
 
         Map<String, int[]> monthTM = new TreeMap<>();
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         while (cursor.moveToNext()) {
 
@@ -103,21 +106,49 @@ public class IncomeActivity extends AppCompatActivity implements LoaderManager.L
             Pattern pattern = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)");
             Matcher matcher = pattern.matcher(date);
 
-            String month = null;
-//            String year = null;
+            // IT'S TERRIBLE! SOMEDAY MUST FIX IT!
+
+//            String month = null;
+//            String lastMonth = null;
 //            String day = null;
+            int month;
+            int year;
+            int day = 0;
+            String monthYear = null;
+            String nextMonthYear = null;
 
             if (matcher.find()) {
-//                day = matcher.group(1);
-                month = matcher.group(2) + "." + matcher.group(3);
-//                year = matcher.group(3);
+                day = Integer.parseInt(matcher.group(1));
+                month = Integer.parseInt(matcher.group(2));
+                year = Integer.parseInt(matcher.group(3));
+                monthYear = month + "." + year;
+                if (month == 12) nextMonthYear = 1 + "." + (year + 1);
+                else nextMonthYear = (month + 1) + "." + year;
             }
 
-            if (monthTM.containsKey(month)) {
-                monthTM.put(month, new int[]{monthTM.get(month)[0] + payedToGran, monthTM.get(month)[1] + payedToMe});
+            if (day > 16 && payedToGran >= Integer.parseInt(sharedPrefs.getString(getString(R.string.settings_subscription_cost_key), "1600"))/2) {
+                //This month
+                if (monthTM.containsKey(monthYear)) {
+                    monthTM.put(monthYear, new int[]{monthTM.get(monthYear)[0] + payedToGran/2, monthTM.get(monthYear)[1] + payedToMe/2});
+                } else {
+                    monthTM.put(monthYear, new int[]{payedToGran/2, payedToMe/2});
+                }
+                //Next month
+                if (monthTM.containsKey(nextMonthYear)) {
+                    monthTM.put(nextMonthYear, new int[]{monthTM.get(nextMonthYear)[0] + payedToGran/2, monthTM.get(nextMonthYear)[1] + payedToMe/2});
+                } else {
+                    monthTM.put(nextMonthYear, new int[]{payedToGran/2, payedToMe/2});
+                }
             } else {
-                monthTM.put(month, new int[]{payedToGran, payedToMe});
+
+                if (monthTM.containsKey(monthYear)) {
+                    monthTM.put(monthYear, new int[]{monthTM.get(monthYear)[0] + payedToGran, monthTM.get(monthYear)[1] + payedToMe});
+                } else {
+                    monthTM.put(monthYear, new int[]{payedToGran, payedToMe});
+                }
             }
+            // IT'S TERRIBLE! SOMEDAY MUST FIX IT!
+
 //            if (matcher.group(2).equals(mCurrentMonth) && matcher.group(3).equals(mCurrentYear)) {
 //                currentIncomeGran += payedToGran;
 //                currentIncomeMe += payedToMe;
