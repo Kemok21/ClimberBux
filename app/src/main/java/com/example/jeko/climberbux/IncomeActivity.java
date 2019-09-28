@@ -32,38 +32,17 @@ public class IncomeActivity extends AppCompatActivity implements LoaderManager.L
 
     @BindView(R.id.list_view_payed)
     ListView payedListView;
-//    @BindView(R.id.current_income_me)
-//    TextView currentIncomeMeTextView;
-//    @BindView(R.id.last_income_gran)
-//    TextView lastIncomeGranTextView;
-//    @BindView(R.id.last_income_me)
-//    TextView lastIncomeMeTextView;
-
-//    private String mCurrentMonth = String.valueOf(currentDate.get(Calendar.MONTH) + 1);
-//    private String mCurrentYear = String.valueOf(currentDate.get(Calendar.YEAR));
-//    private String mLastMonth = String.valueOf(currentDate.get(Calendar.MONTH));
-//    private String mLastYear = String.valueOf(currentDate.get(Calendar.YEAR) - 1);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_income);
         ButterKnife.bind(this);
-//
-//        if (mLastMonth.equals(getString(R.string.calendar_december))) {
-//            mLastMonth = getString(R.string.december);
-//            mLastYear = String.valueOf(currentDate.get(Calendar.YEAR) - 1);
-//        }
 
         getLoaderManager().initLoader(PAYMENT_LOADER, null, this);
 
         mIncomeAdapter = new IncomeAdapter(this, payedByMonthArrayList);
         payedListView.setAdapter(mIncomeAdapter);
-
-//        currentIncomeGranTextView.setText(String.valueOf(currentIncomeGran));
-//        currentIncomeMeTextView.setText(String.valueOf(currentIncomeMe));
-//        lastIncomeGranTextView.setText(String.valueOf(lastIncomeGran));
-//        lastIncomeMeTextView.setText(String.valueOf(lastIncomeMe));
     }
 
     @Override
@@ -85,10 +64,6 @@ public class IncomeActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-//        int currentIncomeGran = 0;
-//        int currentIncomeMe = 0;
-//        int lastIncomeGran = 0;
-//        int lastIncomeMe = 0;
 
         Map<String, int[]> monthTM = new TreeMap<>();
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -148,14 +123,6 @@ public class IncomeActivity extends AppCompatActivity implements LoaderManager.L
                 }
             }
             // IT'S TERRIBLE! SOMEDAY MUST FIX IT!
-
-//            if (matcher.group(2).equals(mCurrentMonth) && matcher.group(3).equals(mCurrentYear)) {
-//                currentIncomeGran += payedToGran;
-//                currentIncomeMe += payedToMe;
-//            } else if (matcher.group(2).equals(mLastMonth) && matcher.group(3).equals(mCurrentYear)) {
-//                lastIncomeGran += payedToGran;
-//                lastIncomeMe += payedToMe;
-//            }
         }
 
         for (String m : monthTM.keySet()) {
@@ -165,8 +132,6 @@ public class IncomeActivity extends AppCompatActivity implements LoaderManager.L
                     monthTM.get(m)[1]
             ));
         }
-//        payedByMonthArrayList.add(new PayedByMonth(mCurrentMonth, currentIncomeGran, currentIncomeMe));
-//        payedByMonthArrayList.add(new PayedByMonth(mLastMonth, lastIncomeGran, lastIncomeMe));
 
         mIncomeAdapter.notifyDataSetChanged();
     }
