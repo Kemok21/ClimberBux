@@ -2,11 +2,10 @@
 .gradle
 /local.properties
 /.idea/libraries
+/.idea/codeStyles
 /.idea/modules.xml
 /.idea/workspace.xml
 .DS_Store
 /build
 /captures
 .externalNativeBuild
-.idea/caches/gradle_models.ser
-app/src/main/res/layout-v16/
